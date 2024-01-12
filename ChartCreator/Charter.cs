@@ -14,7 +14,6 @@ namespace ChartCreator
 	public class Charter
 	{
 		private Bitmap originalImage;
-		private List<Bitmap> history;
 		private List<Color> yarnColors;
 		private List<Color> replacementYarnColors;
 		private Bitmap chart;
@@ -23,16 +22,11 @@ namespace ChartCreator
 		private int[][] chartArray;
 		public Charter()
 		{
-			history = new List<Bitmap>();
-			YarnColors = new List<Color>();
 			stockinetteStitchImg = new Bitmap(ChartCreator.Properties.Resources.stitch_stockinette_lerp);
 		}
 
-		public void generateChartFromArray(double hGauge, double vGauge, int vCount, double sqWidth, double meshThickness)
+		public void generateChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness)
 		{
-			double whRatio = vGauge / hGauge;
-			double sqHeight = sqWidth / whRatio;
-			int hCount = (int)((double)originalImage.Width / (double)originalImage.Height * vCount / whRatio);
 			double chartWidth = sqWidth * hCount;
 			double chartHeight = sqHeight * vCount;
 
@@ -55,11 +49,8 @@ namespace ChartCreator
 			g.Dispose();
 		}
 
-		public void generateStockinetteChartFromArray(double hGauge, double vGauge, int vCount, double sqWidth, double meshThickness)
+		public void generateStockinetteChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness)
 		{
-			double whRatio = vGauge / hGauge;
-			double sqHeight = sqWidth / whRatio;
-			int hCount = (int)((double)originalImage.Width / (double)originalImage.Height * vCount / whRatio);
 			double chartWidth = sqWidth * hCount;
 			double chartHeight = sqHeight * vCount;
 
@@ -109,11 +100,42 @@ namespace ChartCreator
 			for (int j = 0; j < vCount; j++)
 			{
 				int[] r = new int[hCount];
+				double[] errRow = new double[hCount];
+				double rightErr = 0;
 				for (int i = 0; i < hCount; i++)
 				{
 					int x = (int)((double)(i + 0.5) / hCount * originalImage.Width);
 					int y = (int)((double)(j + 0.5) / vCount * originalImage.Height);
-					r[i] =  closestYarnColorIndex(originalImage.GetPixel(x, y));
+					Color curCol = originalImage.GetPixel(x, y);
+					int cci = closestYarnColorIndex(curCol);
+					r[i] =  cci;
+				}
+				chartArray[j] = r;
+			}
+		}
+
+		public void createChartArrayDithered(double hGauge, double vGauge, int vCount)
+		{
+			double whRatio = vGauge / hGauge;
+			int hCount = (int)((double)originalImage.Width / (double)originalImage.Height * vCount / whRatio);
+			chartArray = new int[vCount][];
+			for (int j = 0; j < vCount; j++)
+			{
+				int[] r = new int[hCount];
+				double[] errRow = new double[hCount];
+				double rightErr = 0;
+				for (int i = 0; i < hCount; i++)
+				{
+					int x = (int)((double)(i + 0.5) / hCount * originalImage.Width);
+					int y = (int)((double)(j + 0.5) / vCount * originalImage.Height);
+					Color curCol = originalImage.GetPixel(x, y);
+					int cci = closestYarnColorIndex(curCol);
+					r[i] = cci;
+					Color quCol = yarnColors[cci];
+
+					int rDif = quCol.R - curCol.R;
+					int gDif = quCol.G - curCol.G;
+					int bDif = quCol.B - curCol.B;
 				}
 				chartArray[j] = r;
 			}

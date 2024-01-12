@@ -31,28 +31,28 @@ namespace ChartCreator
 
         private void updatePictureBox()
         {
-            double ratio = (double)mainImage.Width / (double)mainPictureBox.Width;
-            if ((double)mainImage.Height / ratio > mainPictureBox.Height)
+            float ratio = (float)mainImage.Width / (float)mainPictureBox.Width;
+            if ((float)mainImage.Height / ratio > mainPictureBox.Height)
             {
-                ratio = (double)mainImage.Height / (double)mainPictureBox.Height;
+                ratio = (float)mainImage.Height / (float)mainPictureBox.Height;
             }
             Bitmap mimg = new Bitmap((int)(mainImage.Width / ratio), (int)(mainImage.Height / ratio));
             Graphics g = Graphics.FromImage(mimg);
             g.Clear(Color.Black);
-            g.DrawImage(mainImage, 0, 0, (int)(mainImage.Width / ratio), (int)(mainImage.Height / ratio));
+            g.DrawImage(mainImage, 0, 0, mainImage.Width / ratio, mainImage.Height / ratio);
             mainPictureBox.Image = mimg;
             g.Dispose();
         }
-
+        
         private List<Color> yarnColors()
         {
             List<Color> result = new List<Color>();
 
-            foreach (yarnColorSelector ycs in colorsFLP.Controls)
+            foreach(yarnColorSelector ycs in colorsFLP.Controls)
             {
                 result.Add(ycs.Color);
             }
-
+            
             return result;
         }
 
@@ -107,8 +107,7 @@ namespace ChartCreator
         {
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
-            charter.createChartArray(HGauge, VGauge, VCount);
-            charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+            charter.generateChartFromArray(float.Parse(hGaugeTB.Text), float.Parse(vGaugeTB.Text), int.Parse(rowCountTB.Text), int.Parse(stitchHeightTB.Text), float.Parse(lineThicknessTB.Text));
             mainImage = charter.Chart;
             updatePictureBox();
             showChartButton.Enabled = true;
@@ -117,8 +116,7 @@ namespace ChartCreator
         {
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
-            charter.createChartArray(HGauge, VGauge, VCount);
-            charter.generateStockinetteChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+            charter.generateStockinetteChartFromArray(float.Parse(hGaugeTB.Text), float.Parse(vGaugeTB.Text), int.Parse(rowCountTB.Text), int.Parse(stitchHeightTB.Text), float.Parse(lineThicknessTB.Text));
             mainImage = charter.StockinetteChart;
             updatePictureBox();
             showStockButton.Enabled = true;
@@ -135,15 +133,8 @@ namespace ChartCreator
         {
             if (clickColorCB.Checked)
             {
-                try
-                {
-                    Color c = ((Bitmap)(mainPictureBox.Image)).GetPixel(((MouseEventArgs)e).X, ((MouseEventArgs)e).Y);
-                    colorsFLP.Controls.Add(new yarnColorSelector(c));
-                }
-                catch (ArgumentOutOfRangeException) { }
-            } else
-            {
-                //TODOOOOOOODDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+                Color c = ((Bitmap)(mainPictureBox.Image)).GetPixel(((MouseEventArgs)e).X, ((MouseEventArgs)e).Y);
+                colorsFLP.Controls.Add(new yarnColorSelector(c));
             }
         }
         private void Form1_ResizeEnd(object sender, EventArgs e)
@@ -152,15 +143,5 @@ namespace ChartCreator
             updatePictureBox();
         }
         #endregion
-
-        public double VGauge { get => double.Parse(vGaugeTB.Text); set => vGaugeTB.Text = value.ToString(); }
-        public double HGauge { get => double.Parse(hGaugeTB.Text); set => hGaugeTB.Text = value.ToString(); }
-        public int VCount { get => int.Parse(rowCountTB.Text); set => rowCountTB.Text = value.ToString(); }
-        public double LineThickness { get => double.Parse(lineThicknessTB.Text); set => lineThicknessTB.Text = value.ToString(); }
-        public double StitchWidth { get => double.Parse(stitchWidthTB.Text); set => stitchWidthTB.Text = value.ToString(); }
-        public bool DitherChart { get => ditherCB.Checked; set => ditherCB.Checked = value; }
-        public bool ClickColor { get => clickColorCB.Checked; set => clickColorCB.Checked = value; }
-        public double StitchHeight { get => StitchWidth * HGauge / VGauge; }
-        public int HCount { get => (int)((double)charter.OriginalImage.Width / (double)charter.OriginalImage.Height * VCount * HGauge / VGauge); }
     }
 }

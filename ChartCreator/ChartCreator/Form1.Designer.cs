@@ -33,8 +33,6 @@ namespace ChartCreator
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.showStockButton = new System.Windows.Forms.Button();
-            this.createStockChartButton = new System.Windows.Forms.Button();
             this.showImageButton = new System.Windows.Forms.Button();
             this.showChartButton = new System.Windows.Forms.Button();
             this.createChartButton = new System.Windows.Forms.Button();
@@ -46,9 +44,6 @@ namespace ChartCreator
             this.addColorButton = new System.Windows.Forms.Button();
             this.mainPictureBox = new System.Windows.Forms.PictureBox();
             this.chartSettingsGB = new System.Windows.Forms.GroupBox();
-            this.ditherCB = new System.Windows.Forms.CheckBox();
-            this.stitchWidthTB = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lineThicknessTB = new System.Windows.Forms.TextBox();
             this.rowCountTB = new System.Windows.Forms.TextBox();
@@ -59,6 +54,10 @@ namespace ChartCreator
             this.label2 = new System.Windows.Forms.Label();
             this.gaugeTT = new System.Windows.Forms.ToolTip(this.components);
             this.ofd = new System.Windows.Forms.OpenFileDialog();
+            this.label5 = new System.Windows.Forms.Label();
+            this.stitchHeightTB = new System.Windows.Forms.TextBox();
+            this.createStockChartButton = new System.Windows.Forms.Button();
+            this.showStockButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -81,7 +80,7 @@ namespace ChartCreator
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(567, 413);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(559, 413);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tabControl1
@@ -106,33 +105,11 @@ namespace ChartCreator
             this.tabPage1.Controls.Add(this.LoadImageButton);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
             this.tabPage1.Size = new System.Drawing.Size(136, 381);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "main";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // showStockButton
-            // 
-            this.showStockButton.Enabled = false;
-            this.showStockButton.Location = new System.Drawing.Point(6, 226);
-            this.showStockButton.Name = "showStockButton";
-            this.showStockButton.Size = new System.Drawing.Size(124, 30);
-            this.showStockButton.TabIndex = 5;
-            this.showStockButton.Text = "show stock. chart";
-            this.gaugeTT.SetToolTip(this.showStockButton, "If you have created a chart, this button will display a preview");
-            this.showStockButton.UseVisualStyleBackColor = true;
-            this.showStockButton.Click += new System.EventHandler(this.showStockButton_Click);
-            // 
-            // createStockChartButton
-            // 
-            this.createStockChartButton.Location = new System.Drawing.Point(6, 78);
-            this.createStockChartButton.Name = "createStockChartButton";
-            this.createStockChartButton.Size = new System.Drawing.Size(124, 30);
-            this.createStockChartButton.TabIndex = 2;
-            this.createStockChartButton.Text = "create stock. chart";
-            this.createStockChartButton.UseVisualStyleBackColor = true;
-            this.createStockChartButton.Click += new System.EventHandler(this.createStockChartButton_Click);
             // 
             // showImageButton
             // 
@@ -185,7 +162,7 @@ namespace ChartCreator
             this.tabPage2.Controls.Add(this.addColorButton);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
             this.tabPage2.Size = new System.Drawing.Size(136, 381);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "colors";
@@ -197,7 +174,7 @@ namespace ChartCreator
             this.clickColorCB.Checked = true;
             this.clickColorCB.CheckState = System.Windows.Forms.CheckState.Checked;
             this.clickColorCB.Location = new System.Drawing.Point(10, 37);
-            this.clickColorCB.Margin = new System.Windows.Forms.Padding(2);
+            this.clickColorCB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.clickColorCB.Name = "clickColorCB";
             this.clickColorCB.Size = new System.Drawing.Size(74, 17);
             this.clickColorCB.TabIndex = 3;
@@ -214,7 +191,7 @@ namespace ChartCreator
             this.colorsFLP.BackColor = System.Drawing.Color.Transparent;
             this.colorsFLP.Location = new System.Drawing.Point(7, 58);
             this.colorsFLP.Name = "colorsFLP";
-            this.colorsFLP.Size = new System.Drawing.Size(122, 316);
+            this.colorsFLP.Size = new System.Drawing.Size(122, 317);
             this.colorsFLP.TabIndex = 2;
             // 
             // removeColorButton
@@ -224,7 +201,7 @@ namespace ChartCreator
             this.removeColorButton.Size = new System.Drawing.Size(60, 23);
             this.removeColorButton.TabIndex = 1;
             this.removeColorButton.Text = "remove";
-            this.gaugeTT.SetToolTip(this.removeColorButton, "Removes the last color from your palette");
+            this.gaugeTT.SetToolTip(this.removeColorButton, "Removes the last color from your pallette");
             this.removeColorButton.UseVisualStyleBackColor = true;
             this.removeColorButton.Click += new System.EventHandler(this.removeColorButton_Click);
             // 
@@ -235,7 +212,7 @@ namespace ChartCreator
             this.addColorButton.Size = new System.Drawing.Size(57, 23);
             this.addColorButton.TabIndex = 0;
             this.addColorButton.Text = "add";
-            this.gaugeTT.SetToolTip(this.addColorButton, "Adds new color to your palette");
+            this.gaugeTT.SetToolTip(this.addColorButton, "Adds new color to your pallette");
             this.addColorButton.UseVisualStyleBackColor = true;
             this.addColorButton.Click += new System.EventHandler(this.addColorButton_Click);
             // 
@@ -244,15 +221,14 @@ namespace ChartCreator
             this.mainPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPictureBox.Location = new System.Drawing.Point(153, 3);
             this.mainPictureBox.Name = "mainPictureBox";
-            this.mainPictureBox.Size = new System.Drawing.Size(411, 287);
+            this.mainPictureBox.Size = new System.Drawing.Size(403, 287);
             this.mainPictureBox.TabIndex = 1;
             this.mainPictureBox.TabStop = false;
             this.mainPictureBox.Click += new System.EventHandler(this.mainPictureBox_Click);
             // 
             // chartSettingsGB
             // 
-            this.chartSettingsGB.Controls.Add(this.ditherCB);
-            this.chartSettingsGB.Controls.Add(this.stitchWidthTB);
+            this.chartSettingsGB.Controls.Add(this.stitchHeightTB);
             this.chartSettingsGB.Controls.Add(this.label5);
             this.chartSettingsGB.Controls.Add(this.label4);
             this.chartSettingsGB.Controls.Add(this.lineThicknessTB);
@@ -264,43 +240,10 @@ namespace ChartCreator
             this.chartSettingsGB.Controls.Add(this.label2);
             this.chartSettingsGB.Location = new System.Drawing.Point(153, 296);
             this.chartSettingsGB.Name = "chartSettingsGB";
-            this.chartSettingsGB.Size = new System.Drawing.Size(411, 114);
+            this.chartSettingsGB.Size = new System.Drawing.Size(403, 114);
             this.chartSettingsGB.TabIndex = 4;
             this.chartSettingsGB.TabStop = false;
             this.chartSettingsGB.Text = "chart settings";
-            // 
-            // ditherCB
-            // 
-            this.ditherCB.AutoSize = true;
-            this.ditherCB.Location = new System.Drawing.Point(157, 72);
-            this.ditherCB.Margin = new System.Windows.Forms.Padding(2);
-            this.ditherCB.Name = "ditherCB";
-            this.ditherCB.Size = new System.Drawing.Size(79, 17);
-            this.ditherCB.TabIndex = 9;
-            this.ditherCB.Text = "dither chart";
-            this.gaugeTT.SetToolTip(this.ditherCB, "If checked, chart will be dithered.\r\n\r\nThis will only have an effect, if your ori" +
-        "ginal image is a photo\r\nor something with smooth color transitions.");
-            this.ditherCB.UseVisualStyleBackColor = true;
-            // 
-            // stitchWidthTB
-            // 
-            this.stitchWidthTB.Location = new System.Drawing.Point(200, 44);
-            this.stitchWidthTB.Name = "stitchWidthTB";
-            this.stitchWidthTB.Size = new System.Drawing.Size(28, 20);
-            this.stitchWidthTB.TabIndex = 8;
-            this.stitchWidthTB.Text = "40";
-            this.gaugeTT.SetToolTip(this.stitchWidthTB, "Horizontal resolution of a single stitch.\r\n\r\nMostly affects the quality of the st" +
-        "itch version of the chart.\r\n\r\nIf you have many hundreds of rows, it\'s probably b" +
-        "est to lower this number");
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(142, 48);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 13);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "stitch res.";
             // 
             // label4
             // 
@@ -315,12 +258,12 @@ namespace ChartCreator
             // lineThicknessTB
             // 
             this.lineThicknessTB.Location = new System.Drawing.Point(200, 19);
-            this.lineThicknessTB.Margin = new System.Windows.Forms.Padding(2);
+            this.lineThicknessTB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lineThicknessTB.Name = "lineThicknessTB";
             this.lineThicknessTB.Size = new System.Drawing.Size(28, 20);
             this.lineThicknessTB.TabIndex = 6;
-            this.lineThicknessTB.Text = "3";
-            this.gaugeTT.SetToolTip(this.lineThicknessTB, "Thickness of the grid in pixels");
+            this.lineThicknessTB.Text = "1";
+            this.gaugeTT.SetToolTip(this.lineThicknessTB, "Thickness of the black grid");
             // 
             // rowCountTB
             // 
@@ -386,11 +329,53 @@ namespace ChartCreator
             // 
             this.ofd.FileName = "openFileDialog1";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(142, 48);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(52, 13);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "stitch res.";
+            // 
+            // stitchHeightTB
+            // 
+            this.stitchHeightTB.Location = new System.Drawing.Point(200, 44);
+            this.stitchHeightTB.Name = "stitchHeightTB";
+            this.stitchHeightTB.Size = new System.Drawing.Size(28, 20);
+            this.stitchHeightTB.TabIndex = 8;
+            this.stitchHeightTB.Text = "40";
+            this.gaugeTT.SetToolTip(this.stitchHeightTB, "Vertical resolution of a single stitch.\r\n\r\nThis number x row count = final vertic" +
+        "al resolution of your chart image\r\n\r\nIf you have many hundreds of rows, it\'s pro" +
+        "bably best to lower this number");
+            // 
+            // createStockChartButton
+            // 
+            this.createStockChartButton.Location = new System.Drawing.Point(6, 78);
+            this.createStockChartButton.Name = "createStockChartButton";
+            this.createStockChartButton.Size = new System.Drawing.Size(124, 30);
+            this.createStockChartButton.TabIndex = 2;
+            this.createStockChartButton.Text = "create stock. chart";
+            this.createStockChartButton.UseVisualStyleBackColor = true;
+            this.createStockChartButton.Click += new System.EventHandler(this.createStockChartButton_Click);
+            // 
+            // showStockButton
+            // 
+            this.showStockButton.Enabled = false;
+            this.showStockButton.Location = new System.Drawing.Point(6, 226);
+            this.showStockButton.Name = "showStockButton";
+            this.showStockButton.Size = new System.Drawing.Size(124, 30);
+            this.showStockButton.TabIndex = 5;
+            this.showStockButton.Text = "show stock. chart";
+            this.gaugeTT.SetToolTip(this.showStockButton, "If you have created a chart, this button will display a preview");
+            this.showStockButton.UseVisualStyleBackColor = true;
+            this.showStockButton.Click += new System.EventHandler(this.showStockButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(567, 413);
+            this.ClientSize = new System.Drawing.Size(559, 413);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "Chart Designer";
@@ -433,11 +418,10 @@ namespace ChartCreator
         private System.Windows.Forms.Button showChartButton;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox lineThicknessTB;
-        private System.Windows.Forms.TextBox stitchWidthTB;
+        private System.Windows.Forms.TextBox stitchHeightTB;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button showStockButton;
         private System.Windows.Forms.Button createStockChartButton;
-        private System.Windows.Forms.CheckBox ditherCB;
     }
 }
 
