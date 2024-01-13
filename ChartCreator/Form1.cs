@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace ChartCreator
 {
@@ -22,10 +23,11 @@ namespace ChartCreator
             this.Width = 1000;
             this.Height = 800;
             charter = new Charter();
-            charter.OriginalImage = new Bitmap(ChartCreator.Properties.Resources.masterpiece);
+            charter.OriginalImage = new Bitmap(Properties.Resources.masterpiece);
             mainImage = charter.OriginalImage;
 
             this.ResizeEnd += Form1_ResizeEnd;
+            colorsFLP.Controls.Add(new yarnColorSelector(charter.OriginalImage.GetPixel(0, 0)));
             updatePictureBox();
         }
 
@@ -76,7 +78,7 @@ namespace ChartCreator
 
         private void removeColorButton_Click(object sender, EventArgs e)
         {
-            if (colorsFLP.Controls.Count > 0)
+            if (colorsFLP.Controls.Count > 1)
             {
                 colorsFLP.Controls.Remove(colorsFLP.Controls[colorsFLP.Controls.Count - 1]);
             }
@@ -99,7 +101,17 @@ namespace ChartCreator
             {
                 return;
             }
-            charter.OriginalImage = new Bitmap(ofd.FileName);
+            try
+            {
+                charter.OriginalImage = new Bitmap(ofd.FileName);
+            }
+            catch (System.ArgumentException)
+            {
+                MessageBox.Show("You did not select an image file");
+                return;
+            }
+                
+            mainImage = charter.OriginalImage;
             updatePictureBox();
         }
 
@@ -107,26 +119,60 @@ namespace ChartCreator
         {
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
-            charter.createChartArray(HGauge, VGauge, VCount);
+            if (DitherChart)
+            {
+                charter.createChartArrayDithered(HGauge, VGauge, VCount);
+            } else
+            {
+                charter.createChartArray(HGauge, VGauge, VCount);
+            }
             charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
             mainImage = charter.Chart;
             updatePictureBox();
             showChartButton.Enabled = true;
+            saveChartButton.Enabled = true;
         }
         private void createStockChartButton_Click(object sender, EventArgs e)
         {
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
-            charter.createChartArray(HGauge, VGauge, VCount);
+            if (DitherChart)
+            {
+                charter.createChartArrayDithered(HGauge, VGauge, VCount);
+            }
+            else
+            {
+                charter.createChartArray(HGauge, VGauge, VCount);
+            }
             charter.generateStockinetteChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
             mainImage = charter.StockinetteChart;
             updatePictureBox();
             showStockButton.Enabled = true;
+            saveStockChartButton.Enabled = true;
         }
         private void showStockButton_Click(object sender, EventArgs e)
         {
             mainImage = charter.StockinetteChart;
             updatePictureBox();
+        }
+        private void saveChartButton_Click(object sender, EventArgs e)
+        {
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            charter.Chart.Save(sfd.FileName, ImageFormat.Png);
+            mainStatusLabel.Text = "chart saved under: " + sfd.FileName;
+        }
+
+        private void saveStockChartButton_Click(object sender, EventArgs e)
+        {
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            charter.StockinetteChart.Save(sfd.FileName, ImageFormat.Png);
+            mainStatusLabel.Text = "stock. chart saved under: " + sfd.FileName;
         }
         #endregion
 
@@ -153,14 +199,17 @@ namespace ChartCreator
         }
         #endregion
 
-        public double VGauge { get => double.Parse(vGaugeTB.Text); set => vGaugeTB.Text = value.ToString(); }
-        public double HGauge { get => double.Parse(hGaugeTB.Text); set => hGaugeTB.Text = value.ToString(); }
-        public int VCount { get => int.Parse(rowCountTB.Text); set => rowCountTB.Text = value.ToString(); }
-        public double LineThickness { get => double.Parse(lineThicknessTB.Text); set => lineThicknessTB.Text = value.ToString(); }
-        public double StitchWidth { get => double.Parse(stitchWidthTB.Text); set => stitchWidthTB.Text = value.ToString(); }
+        #region properties
+        public double VGauge { get => (double)vGaugeNUD.Value; set => vGaugeNUD.Value = (decimal)value; }
+        public double HGauge { get => (double)hGaugeNUD.Value; set => hGaugeNUD.Value = (decimal)value; }
+        public int VCount { get => (int)rowCountNUD.Value; set => rowCountNUD.Value = (decimal)value; }
+        public double LineThickness { get => (double)lineThicknessNUD.Value; set => lineThicknessNUD.Value = (decimal)value; }
+        public double StitchWidth { get => (double)stitchWidthNUD.Value; set => stitchWidthNUD.Value = (decimal)value; }
+        public bool NegativeGrid { get => negativeGridCB.Checked; set => negativeGridCB.Checked = value; }
         public bool DitherChart { get => ditherCB.Checked; set => ditherCB.Checked = value; }
         public bool ClickColor { get => clickColorCB.Checked; set => clickColorCB.Checked = value; }
         public double StitchHeight { get => StitchWidth * HGauge / VGauge; }
         public int HCount { get => (int)((double)charter.OriginalImage.Width / (double)charter.OriginalImage.Height * VCount * HGauge / VGauge); }
+        #endregion
     }
 }

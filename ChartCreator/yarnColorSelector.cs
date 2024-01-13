@@ -42,6 +42,7 @@ namespace ChartCreator
         {
             yarnColorDialog.ShowDialog();
             selectColorButton.BackColor = yarnColorDialog.Color;
+            replacementColorButton.BackColor = yarnColorDialog.Color;
         }
         public string YarnLabel { get => yarnColorTB.Text; set => yarnColorTB.Text = value; }
 

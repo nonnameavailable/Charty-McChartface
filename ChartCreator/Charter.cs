@@ -20,9 +20,11 @@ namespace ChartCreator
 		private Bitmap stockinetteChart;
 		private Bitmap stockinetteStitchImg;
 		private int[][] chartArray;
+		private bool negativeGrid;
 		public Charter()
 		{
 			stockinetteStitchImg = new Bitmap(ChartCreator.Properties.Resources.stitch_stockinette_lerp);
+			NegativeGrid = false;
 		}
 
 		public void generateChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness)
@@ -45,7 +47,6 @@ namespace ChartCreator
 
 				}
 			}
-			chart.Save(Environment.CurrentDirectory + "\\chart.png", ImageFormat.Png);
 			g.Dispose();
 		}
 
@@ -100,8 +101,6 @@ namespace ChartCreator
 			for (int j = 0; j < vCount; j++)
 			{
 				int[] r = new int[hCount];
-				double[] errRow = new double[hCount];
-				double rightErr = 0;
 				for (int i = 0; i < hCount; i++)
 				{
 					int x = (int)((double)(i + 0.5) / hCount * originalImage.Width);
@@ -119,23 +118,59 @@ namespace ChartCreator
 			double whRatio = vGauge / hGauge;
 			int hCount = (int)((double)originalImage.Width / (double)originalImage.Height * vCount / whRatio);
 			chartArray = new int[vCount][];
+			double[,] errRow = new double[hCount, 3];
+			double[,] colRow = new double[hCount, 3];
 			for (int j = 0; j < vCount; j++)
 			{
 				int[] r = new int[hCount];
-				double[] errRow = new double[hCount];
-				double rightErr = 0;
+				
 				for (int i = 0; i < hCount; i++)
 				{
 					int x = (int)((double)(i + 0.5) / hCount * originalImage.Width);
 					int y = (int)((double)(j + 0.5) / vCount * originalImage.Height);
-					Color curCol = originalImage.GetPixel(x, y);
+					Color c = originalImage.GetPixel(x, y);
+					colRow[i, 0] = c.R / 255d + errRow[i, 0];
+					colRow[i, 1] = c.G / 255d + errRow[i, 1];
+					colRow[i, 2] = c.B / 255d + errRow[i, 2];
+				}
+				errRow = new double[hCount, 3];
+				for (int i = 0; i < hCount; i++)
+				{
+					double cR = colRow[i, 0];
+					double cG = colRow[i, 1];
+					double cB = colRow[i, 2];
+					Color curCol = Color.FromArgb(IP.clamp((int)(cR * 255), 0, 255), IP.clamp((int)(cG * 255), 0, 255), IP.clamp((int)(cB * 255), 0, 255));
 					int cci = closestYarnColorIndex(curCol);
 					r[i] = cci;
 					Color quCol = yarnColors[cci];
+					double qR = quCol.R / 255d;
+					double qG = quCol.G / 255d;
+					double qB = quCol.B / 255d;
 
-					int rDif = quCol.R - curCol.R;
-					int gDif = quCol.G - curCol.G;
-					int bDif = quCol.B - curCol.B;
+                    double rDif = cR - qR;
+                    double gDif = cG - qG;
+                    double bDif = cB - qB;
+
+					if(i < hCount - 1)
+                    {
+						colRow[i + 1, 0] += rDif * 7 / 16;
+						colRow[i + 1, 1] += gDif * 7 / 16;
+						colRow[i + 1, 2] += bDif * 7 / 16;
+
+						errRow[i + 1, 0] += rDif / 16;
+						errRow[i + 1, 1] += gDif / 16;
+						errRow[i + 1, 2] += bDif / 16;
+					}
+					if(i > 0)
+                    {
+						errRow[i - 1, 0] += rDif * 3 / 16;
+						errRow[i - 1, 1] += gDif * 3 / 16;
+						errRow[i - 1, 2] += bDif * 3 / 16;
+					}
+
+					errRow[i, 0] += rDif * 5d / 16;
+					errRow[i, 1] += gDif * 5d / 16;
+					errRow[i, 2] += bDif * 5d / 16;
 				}
 				chartArray[j] = r;
 			}
@@ -172,10 +207,11 @@ namespace ChartCreator
 		public Bitmap StockinetteChart { get => stockinetteChart; }
         public List<Color> YarnColors { get => yarnColors; set => yarnColors = value; }
         public List<Color> ReplacementYarnColors { get => replacementYarnColors; set => replacementYarnColors = value; }
-		#endregion
+        public bool NegativeGrid { get => negativeGrid; set => negativeGrid = value; }
+        #endregion
 
-		#region unused
-		private Bitmap coloredStitchImgDithered(int width, int height, Color c)
+        #region unused
+        private Bitmap coloredStitchImgDithered(int width, int height, Color c)
 		{
 			Bitmap stitchCopy = (Bitmap)stockinetteStitchImg.Clone();
 			Bitmap result = new Bitmap(width, (int)(height * 2.16));

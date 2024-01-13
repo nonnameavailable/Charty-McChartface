@@ -22,5 +22,10 @@ namespace ChartCreator
             int newB = (int)(c1.B + (c2.B - c1.B) * amount);
             return Color.FromArgb(newR, newG, newB);
         }
+
+        public static int clamp(int value, int min, int max)
+        {
+            return (value < min) ? min : (value > max) ? max : value;
+        }
     }
 }
