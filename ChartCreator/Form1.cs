@@ -293,7 +293,7 @@ namespace ChartCreator
                     ratio = (double)mainImage.Height / (double)mainPictureBox.Height;
                 }
                 int w = (int)(mainImage.Width / ratio);
-                int h = (int)(mainImage.Width / ratio);
+                int h = (int)(mainImage.Height / ratio);
                 int[] result = new int[2];
                 result[0] = w;
                 result[1] = h;

@@ -532,6 +532,7 @@ namespace ChartCreator
             // 
             // mainPictureBox
             // 
+            this.mainPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPictureBox.Location = new System.Drawing.Point(0, 0);
             this.mainPictureBox.Name = "mainPictureBox";
             this.mainPictureBox.Size = new System.Drawing.Size(411, 262);
