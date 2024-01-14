@@ -27,5 +27,16 @@ namespace ChartCreator
         {
             return (value < min) ? min : (value > max) ? max : value;
         }
+
+        public static Color contrastColor(Color c)
+        {
+            if(c.R + c.G + c.B > 382)
+            {
+                return Color.Black;
+            }
+            {
+                return Color.White;
+            }
+        }
     }
 }
