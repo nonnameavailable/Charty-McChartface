@@ -46,8 +46,8 @@ namespace ChartCreator
             this.colorsFLP = new System.Windows.Forms.FlowLayoutPanel();
             this.removeColorButton = new System.Windows.Forms.Button();
             this.addColorButton = new System.Windows.Forms.Button();
-            this.mainPictureBox = new System.Windows.Forms.PictureBox();
             this.chartSettingsGB = new System.Windows.Forms.GroupBox();
+            this.numbersCB = new System.Windows.Forms.CheckBox();
             this.negativeGridCB = new System.Windows.Forms.CheckBox();
             this.stitchWidthNUD = new System.Windows.Forms.NumericUpDown();
             this.lineThicknessNUD = new System.Windows.Forms.NumericUpDown();
@@ -62,14 +62,19 @@ namespace ChartCreator
             this.label2 = new System.Windows.Forms.Label();
             this.mainStatusStrip = new System.Windows.Forms.StatusStrip();
             this.mainStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.picturePanel = new System.Windows.Forms.Panel();
+            this.mainPictureBox = new System.Windows.Forms.PictureBox();
             this.gaugeTT = new System.Windows.Forms.ToolTip(this.components);
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.sfd = new System.Windows.Forms.SaveFileDialog();
+            this.pictureCMS = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.renderModeMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.renderFitMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.renderScrollMI = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             this.chartSettingsGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stitchWidthNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lineThicknessNUD)).BeginInit();
@@ -77,6 +82,9 @@ namespace ChartCreator
             ((System.ComponentModel.ISupportInitialize)(this.vGaugeNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hGaugeNUD)).BeginInit();
             this.mainStatusStrip.SuspendLayout();
+            this.picturePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
+            this.pictureCMS.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -85,9 +93,9 @@ namespace ChartCreator
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.tabControl1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.mainPictureBox, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.chartSettingsGB, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.mainStatusStrip, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.picturePanel, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -286,18 +294,9 @@ namespace ChartCreator
             this.addColorButton.UseVisualStyleBackColor = true;
             this.addColorButton.Click += new System.EventHandler(this.addColorButton_Click);
             // 
-            // mainPictureBox
-            // 
-            this.mainPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainPictureBox.Location = new System.Drawing.Point(153, 3);
-            this.mainPictureBox.Name = "mainPictureBox";
-            this.mainPictureBox.Size = new System.Drawing.Size(411, 262);
-            this.mainPictureBox.TabIndex = 1;
-            this.mainPictureBox.TabStop = false;
-            this.mainPictureBox.Click += new System.EventHandler(this.mainPictureBox_Click);
-            // 
             // chartSettingsGB
             // 
+            this.chartSettingsGB.Controls.Add(this.numbersCB);
             this.chartSettingsGB.Controls.Add(this.negativeGridCB);
             this.chartSettingsGB.Controls.Add(this.stitchWidthNUD);
             this.chartSettingsGB.Controls.Add(this.lineThicknessNUD);
@@ -317,15 +316,27 @@ namespace ChartCreator
             this.chartSettingsGB.TabStop = false;
             this.chartSettingsGB.Text = "chart settings";
             // 
+            // numbersCB
+            // 
+            this.numbersCB.AutoSize = true;
+            this.numbersCB.Location = new System.Drawing.Point(269, 68);
+            this.numbersCB.Name = "numbersCB";
+            this.numbersCB.Size = new System.Drawing.Size(92, 17);
+            this.numbersCB.TabIndex = 16;
+            this.numbersCB.Text = "draw numbers";
+            this.gaugeTT.SetToolTip(this.numbersCB, "When checked, chart will include number of stitches\r\nfor every color segment in a" +
+        " row so you don\'t have to count");
+            this.numbersCB.UseVisualStyleBackColor = true;
+            // 
             // negativeGridCB
             // 
             this.negativeGridCB.AutoSize = true;
             this.negativeGridCB.Location = new System.Drawing.Point(269, 44);
             this.negativeGridCB.Name = "negativeGridCB";
-            this.negativeGridCB.Size = new System.Drawing.Size(87, 17);
+            this.negativeGridCB.Size = new System.Drawing.Size(98, 17);
             this.negativeGridCB.TabIndex = 15;
-            this.negativeGridCB.Text = "negative grid";
-            this.gaugeTT.SetToolTip(this.negativeGridCB, "If checked, grid will be negative of the stitch color\r\n\r\nYou can use this if your" +
+            this.negativeGridCB.Text = "contrasting grid";
+            this.gaugeTT.SetToolTip(this.negativeGridCB, "If checked, grid will be drawn in a contrasting color\r\n\r\nYou can use this if your" +
         " yarns are very dark\r\nand the grid is not visible");
             this.negativeGridCB.UseVisualStyleBackColor = true;
             this.negativeGridCB.CheckedChanged += new System.EventHandler(this.negativeGridCB_CheckedChanged);
@@ -509,6 +520,25 @@ namespace ChartCreator
             this.mainStatusLabel.Text = "Hello there";
             this.mainStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // picturePanel
+            // 
+            this.picturePanel.AutoScroll = true;
+            this.picturePanel.Controls.Add(this.mainPictureBox);
+            this.picturePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.picturePanel.Location = new System.Drawing.Point(153, 3);
+            this.picturePanel.Name = "picturePanel";
+            this.picturePanel.Size = new System.Drawing.Size(411, 262);
+            this.picturePanel.TabIndex = 6;
+            // 
+            // mainPictureBox
+            // 
+            this.mainPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.mainPictureBox.Name = "mainPictureBox";
+            this.mainPictureBox.Size = new System.Drawing.Size(411, 262);
+            this.mainPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.mainPictureBox.TabIndex = 0;
+            this.mainPictureBox.TabStop = false;
+            // 
             // gaugeTT
             // 
             this.gaugeTT.AutoPopDelay = 5500;
@@ -523,6 +553,38 @@ namespace ChartCreator
             // 
             this.sfd.DefaultExt = "png";
             this.sfd.FileName = "normalchart";
+            this.sfd.Filter = "PNG Image Files (*.png)|*.png";
+            this.sfd.RestoreDirectory = true;
+            // 
+            // pictureCMS
+            // 
+            this.pictureCMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.renderModeMI});
+            this.pictureCMS.Name = "pictureCMS";
+            this.pictureCMS.Size = new System.Drawing.Size(143, 26);
+            // 
+            // renderModeMI
+            // 
+            this.renderModeMI.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.renderFitMI,
+            this.renderScrollMI});
+            this.renderModeMI.Name = "renderModeMI";
+            this.renderModeMI.Size = new System.Drawing.Size(142, 22);
+            this.renderModeMI.Text = "render mode";
+            // 
+            // renderFitMI
+            // 
+            this.renderFitMI.Name = "renderFitMI";
+            this.renderFitMI.Size = new System.Drawing.Size(102, 22);
+            this.renderFitMI.Text = "fit";
+            this.renderFitMI.Click += new System.EventHandler(this.RenderFitMI_Click);
+            // 
+            // renderScrollMI
+            // 
+            this.renderScrollMI.Name = "renderScrollMI";
+            this.renderScrollMI.Size = new System.Drawing.Size(102, 22);
+            this.renderScrollMI.Text = "scroll";
+            this.renderScrollMI.Click += new System.EventHandler(this.renderScrollMI_Click);
             // 
             // Form1
             // 
@@ -538,7 +600,6 @@ namespace ChartCreator
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).EndInit();
             this.chartSettingsGB.ResumeLayout(false);
             this.chartSettingsGB.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stitchWidthNUD)).EndInit();
@@ -548,6 +609,10 @@ namespace ChartCreator
             ((System.ComponentModel.ISupportInitialize)(this.hGaugeNUD)).EndInit();
             this.mainStatusStrip.ResumeLayout(false);
             this.mainStatusStrip.PerformLayout();
+            this.picturePanel.ResumeLayout(false);
+            this.picturePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).EndInit();
+            this.pictureCMS.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -559,7 +624,6 @@ namespace ChartCreator
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Button LoadImageButton;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.PictureBox mainPictureBox;
         private System.Windows.Forms.GroupBox chartSettingsGB;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -590,6 +654,13 @@ namespace ChartCreator
         private System.Windows.Forms.Button saveChartButton;
         private System.Windows.Forms.StatusStrip mainStatusStrip;
         private System.Windows.Forms.ToolStripStatusLabel mainStatusLabel;
+        private System.Windows.Forms.CheckBox numbersCB;
+        private System.Windows.Forms.Panel picturePanel;
+        private System.Windows.Forms.PictureBox mainPictureBox;
+        private System.Windows.Forms.ContextMenuStrip pictureCMS;
+        private System.Windows.Forms.ToolStripMenuItem renderModeMI;
+        private System.Windows.Forms.ToolStripMenuItem renderFitMI;
+        private System.Windows.Forms.ToolStripMenuItem renderScrollMI;
     }
 }
 

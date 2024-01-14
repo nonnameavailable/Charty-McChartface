@@ -16,6 +16,7 @@ namespace ChartCreator
     {
         private Charter charter;
         private Bitmap mainImage;
+        private bool renderModeScroll;
 
         public Form1()
         {
@@ -30,26 +31,45 @@ namespace ChartCreator
             yarnColorSelector firstYcs = new yarnColorSelector(charter.OriginalImage.GetPixel(0, 0));
             firstYcs.IsPainting = true;
             colorsFLP.Controls.Add(firstYcs);
+            renderModeScroll = false;
+            mainPictureBox.Dock = DockStyle.Fill;
             updatePictureBox();
 
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
+
+            sfd.FileOk += Sfd_FileOk;
+            mainPictureBox.MouseClick += mainPictureBox_MouseClick;
+            mainPictureBox.ContextMenuStrip = pictureCMS;
+        }
+
+        private void Sfd_FileOk(object sender, CancelEventArgs e)
+        {
+            SaveFileDialog sv = (sender as SaveFileDialog);
+            if (Path.GetExtension(sv.FileName).ToLower() != ".png")
+            {
+                e.Cancel = true;
+                MessageBox.Show("Please don't use extensions in your file name or use .png");
+                return;
+            }
         }
 
         private void updatePictureBox()
         {
-            //double ratio = (double)mainImage.Width / (double)mainPictureBox.Width;
-            //if ((double)mainImage.Height / ratio > mainPictureBox.Height)
-            //{
-            //    ratio = (double)mainImage.Height / (double)mainPictureBox.Height;
-            //}
-            int[] dims = DispImgDims;
-            Bitmap mimg = new Bitmap(dims[0], dims[1]);
-            Graphics g = Graphics.FromImage(mimg);
-            g.Clear(Color.Black);
-            g.DrawImage(mainImage, 0, 0, dims[0], dims[1]);
-            mainPictureBox.Image = mimg;
-            g.Dispose();
+            if (renderModeScroll)
+            {
+                mainPictureBox.Image = mainImage;
+            }
+            else
+            {
+                int[] dims = DispImgDims;
+                Bitmap mimg = new Bitmap(dims[0], dims[1]);
+                Graphics g = Graphics.FromImage(mimg);
+                g.Clear(Color.Black);
+                g.DrawImage(mainImage, 0, 0, dims[0], dims[1]);
+                mainPictureBox.Image = mimg;
+                g.Dispose();
+            }
         }
 
         private List<Color> yarnColors()
@@ -136,7 +156,7 @@ namespace ChartCreator
             {
                 charter.createChartArray(HGauge, VGauge, VCount);
             }
-            charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+            charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness, DrawNumbers);
             mainImage = charter.Chart;
             updatePictureBox();
             showChartButton.Enabled = true;
@@ -173,6 +193,7 @@ namespace ChartCreator
             }
             charter.Chart.Save(sfd.FileName, ImageFormat.Png);
             mainStatusLabel.Text = "chart saved under: " + sfd.FileName;
+            sfd.FileName = Path.GetFileName(sfd.FileName);
         }
 
         private void saveStockChartButton_Click(object sender, EventArgs e)
@@ -183,11 +204,12 @@ namespace ChartCreator
             }
             charter.StockinetteChart.Save(sfd.FileName, ImageFormat.Png);
             mainStatusLabel.Text = "stock. chart saved under: " + sfd.FileName;
+            sfd.FileName = Path.GetFileName(sfd.FileName);
         }
         #endregion
 
         #region other event handlers
-        private void mainPictureBox_Click(object sender, EventArgs e)
+        private void mainPictureBox_MouseClick(object sender, EventArgs e)
         {
             if (clickColorCB.Checked)
             {
@@ -217,7 +239,7 @@ namespace ChartCreator
                 charter.YarnColors = yarnColors();
                 charter.ReplacementYarnColors = replacementColors();
                 charter.setGrid(chartX, chartY, paintColorIndex);
-                charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+                charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness, DrawNumbers);
                 mainImage = charter.Chart;
                 updatePictureBox();
             }
@@ -227,6 +249,22 @@ namespace ChartCreator
             mainPictureBox.Invalidate();
             updatePictureBox();
         }
+
+        private void RenderFitMI_Click(object sender, EventArgs e)
+        {
+            renderModeScroll = false;
+            mainPictureBox.Dock = DockStyle.Fill;
+            updatePictureBox();
+        }
+
+        private void renderScrollMI_Click(object sender, EventArgs e)
+        {
+            renderModeScroll = true;
+            mainPictureBox.Dock = DockStyle.None;
+            updatePictureBox();
+        }
+
+
         private void negativeGridCB_CheckedChanged(object sender, EventArgs e)
         {
             charter.NegativeGrid = negativeGridCB.Checked;
@@ -242,6 +280,7 @@ namespace ChartCreator
         public bool NegativeGrid { get => negativeGridCB.Checked; set => negativeGridCB.Checked = value; }
         public bool DitherChart { get => ditherCB.Checked; set => ditherCB.Checked = value; }
         public bool ClickColor { get => clickColorCB.Checked; set => clickColorCB.Checked = value; }
+        public bool DrawNumbers { get => numbersCB.Checked; set => numbersCB.Checked = value; }
         public double StitchHeight { get => StitchWidth * HGauge / VGauge; }
         public int HCount { get => (int)((double)charter.OriginalImage.Width / (double)charter.OriginalImage.Height * VCount * HGauge / VGauge); }
         public int[] DispImgDims

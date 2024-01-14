@@ -27,7 +27,7 @@ namespace ChartCreator
 			NegativeGrid = false;
 		}
 
-		public void generateChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness)
+		public void generateChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness, bool drawNumbers)
 		{
 			double chartWidth = sqWidth * hCount;
 			double chartHeight = sqHeight * vCount;
@@ -37,20 +37,48 @@ namespace ChartCreator
 
 			for (int j = 0; j < vCount; j++)
 			{
+				int csCounter = 0;
+				int prevColIndex = chartArray[j][0];
 				for (int i = 0; i < hCount; i++)
 				{
 					int cx = (int)(i * sqWidth);
 					int cy = (int)(j * sqHeight);
-					g.FillRectangle(new SolidBrush(replacementYarnColors[chartArray[j][i]]), cx, cy, (float)sqWidth, (float)sqHeight);
+					Color stitchColor = replacementYarnColors[chartArray[j][i]];
+					g.FillRectangle(new SolidBrush(stitchColor), cx, cy, (float)sqWidth, (float)sqHeight);
 					if (meshThickness > 0)
 					{
 						Color gridColor = Color.Black;
-						if (NegativeGrid) gridColor = IP.negativeColor(replacementYarnColors[chartArray[j][i]]);
+						if (NegativeGrid) gridColor = IP.contrastColor(stitchColor);
 						g.DrawRectangle(new Pen(gridColor, (int)meshThickness), cx, cy, (int)sqWidth, (int)sqHeight);
-
 					}
 
-
+                    if (drawNumbers)
+                    {
+						int curColIndex = chartArray[j][i];
+						if (curColIndex != prevColIndex || i == hCount - 1)
+						{
+							float sx = (float)(cx - sqWidth);
+							float sy = cy;
+							Color textColor = replacementYarnColors[chartArray[j][i - 1]];
+							if (i == hCount - 1)
+                            {
+								sx = cx;
+								csCounter++;
+								textColor = stitchColor;
+							}
+							g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+							Font drawFont = new Font("Arial", (float)(sqHeight * 0.7));
+							SolidBrush drawBrush = new SolidBrush(IP.contrastColor(textColor));
+							g.DrawString(csCounter.ToString(), drawFont, drawBrush, sx, sy);
+							csCounter = 1;
+						}
+						else
+						{
+							csCounter++;
+						}
+						prevColIndex = curColIndex;
+					}
+					
 				}
 			}
 			g.Dispose();
