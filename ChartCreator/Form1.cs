@@ -27,21 +27,27 @@ namespace ChartCreator
             mainImage = charter.OriginalImage;
 
             this.ResizeEnd += Form1_ResizeEnd;
-            colorsFLP.Controls.Add(new yarnColorSelector(charter.OriginalImage.GetPixel(0, 0)));
+            yarnColorSelector firstYcs = new yarnColorSelector(charter.OriginalImage.GetPixel(0, 0));
+            firstYcs.IsPainting = true;
+            colorsFLP.Controls.Add(firstYcs);
             updatePictureBox();
+
+            charter.YarnColors = yarnColors();
+            charter.ReplacementYarnColors = replacementColors();
         }
 
         private void updatePictureBox()
         {
-            double ratio = (double)mainImage.Width / (double)mainPictureBox.Width;
-            if ((double)mainImage.Height / ratio > mainPictureBox.Height)
-            {
-                ratio = (double)mainImage.Height / (double)mainPictureBox.Height;
-            }
-            Bitmap mimg = new Bitmap((int)(mainImage.Width / ratio), (int)(mainImage.Height / ratio));
+            //double ratio = (double)mainImage.Width / (double)mainPictureBox.Width;
+            //if ((double)mainImage.Height / ratio > mainPictureBox.Height)
+            //{
+            //    ratio = (double)mainImage.Height / (double)mainPictureBox.Height;
+            //}
+            int[] dims = DispImgDims;
+            Bitmap mimg = new Bitmap(dims[0], dims[1]);
             Graphics g = Graphics.FromImage(mimg);
             g.Clear(Color.Black);
-            g.DrawImage(mainImage, 0, 0, (int)(mainImage.Width / ratio), (int)(mainImage.Height / ratio));
+            g.DrawImage(mainImage, 0, 0, dims[0], dims[1]);
             mainPictureBox.Image = mimg;
             g.Dispose();
         }
@@ -74,6 +80,8 @@ namespace ChartCreator
         private void addColorButton_Click(object sender, EventArgs e)
         {
             colorsFLP.Controls.Add(new yarnColorSelector(Color.White));
+            charter.YarnColors = yarnColors();
+            charter.ReplacementYarnColors = replacementColors();
         }
 
         private void removeColorButton_Click(object sender, EventArgs e)
@@ -82,6 +90,8 @@ namespace ChartCreator
             {
                 colorsFLP.Controls.Remove(colorsFLP.Controls[colorsFLP.Controls.Count - 1]);
             }
+            charter.YarnColors = yarnColors();
+            charter.ReplacementYarnColors = replacementColors();
         }
 
         private void showChartButton_Click(object sender, EventArgs e)
@@ -189,13 +199,37 @@ namespace ChartCreator
                 catch (ArgumentOutOfRangeException) { }
             } else
             {
-                //TODOOOOOOODDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+                double x = ((MouseEventArgs)e).X;
+                double y = ((MouseEventArgs)e).Y;
+                
+                int chartX = (int)(x / DispImgDims[0] * HCount);
+                int chartY = (int)(y / DispImgDims[1] * VCount);
+                Color paintC = charter.YarnColors[0];
+                foreach(yarnColorSelector ycs in colorsFLP.Controls)
+                {
+                    if (ycs.IsPainting)
+                    {
+                        paintC = ycs.Color;
+                        break;
+                    }
+                }
+                int paintColorIndex = charter.YarnColors.IndexOf(paintC);
+                charter.YarnColors = yarnColors();
+                charter.ReplacementYarnColors = replacementColors();
+                charter.setGrid(chartX, chartY, paintColorIndex);
+                charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+                mainImage = charter.Chart;
+                updatePictureBox();
             }
         }
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
             mainPictureBox.Invalidate();
             updatePictureBox();
+        }
+        private void negativeGridCB_CheckedChanged(object sender, EventArgs e)
+        {
+            charter.NegativeGrid = negativeGridCB.Checked;
         }
         #endregion
 
@@ -210,6 +244,23 @@ namespace ChartCreator
         public bool ClickColor { get => clickColorCB.Checked; set => clickColorCB.Checked = value; }
         public double StitchHeight { get => StitchWidth * HGauge / VGauge; }
         public int HCount { get => (int)((double)charter.OriginalImage.Width / (double)charter.OriginalImage.Height * VCount * HGauge / VGauge); }
+        public int[] DispImgDims
+        { 
+            get
+            {
+                double ratio = (double)mainImage.Width / (double)mainPictureBox.Width;
+                if ((double)mainImage.Height / ratio > mainPictureBox.Height)
+                {
+                    ratio = (double)mainImage.Height / (double)mainPictureBox.Height;
+                }
+                int w = (int)(mainImage.Width / ratio);
+                int h = (int)(mainImage.Width / ratio);
+                int[] result = new int[2];
+                result[0] = w;
+                result[1] = h;
+                return result;
+            }        
+        }
         #endregion
     }
 }

@@ -42,7 +42,13 @@ namespace ChartCreator
 					int cx = (int)(i * sqWidth);
 					int cy = (int)(j * sqHeight);
 					g.FillRectangle(new SolidBrush(replacementYarnColors[chartArray[j][i]]), cx, cy, (float)sqWidth, (float)sqHeight);
-					if (meshThickness > 0) { g.DrawRectangle(new Pen(IP.negativeColor(replacementYarnColors[chartArray[j][i]]), (int)meshThickness), cx, cy, (int)sqWidth, (int)sqHeight); }
+					if (meshThickness > 0)
+					{
+						Color gridColor = Color.Black;
+						if (NegativeGrid) gridColor = IP.negativeColor(replacementYarnColors[chartArray[j][i]]);
+						g.DrawRectangle(new Pen(gridColor, (int)meshThickness), cx, cy, (int)sqWidth, (int)sqHeight);
+
+					}
 
 
 				}
@@ -200,6 +206,16 @@ namespace ChartCreator
 				result.Add(coloredStitchImgLerp(width, height, c));
             }
 			return result;
+        }
+
+		public void setGrid(int x, int y, int colorIndex)
+        {
+			try
+			{
+				chartArray[y][x] = colorIndex;
+			}
+			catch (IndexOutOfRangeException) { }
+			
         }
         #region properties
         public Bitmap OriginalImage { get => originalImage; set => originalImage = value; }

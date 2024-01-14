@@ -33,6 +33,8 @@ namespace ChartCreator
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.saveStockChartButton = new System.Windows.Forms.Button();
+            this.saveChartButton = new System.Windows.Forms.Button();
             this.showStockButton = new System.Windows.Forms.Button();
             this.createStockChartButton = new System.Windows.Forms.Button();
             this.showImageButton = new System.Windows.Forms.Button();
@@ -46,36 +48,34 @@ namespace ChartCreator
             this.addColorButton = new System.Windows.Forms.Button();
             this.mainPictureBox = new System.Windows.Forms.PictureBox();
             this.chartSettingsGB = new System.Windows.Forms.GroupBox();
+            this.negativeGridCB = new System.Windows.Forms.CheckBox();
+            this.stitchWidthNUD = new System.Windows.Forms.NumericUpDown();
+            this.lineThicknessNUD = new System.Windows.Forms.NumericUpDown();
+            this.rowCountNUD = new System.Windows.Forms.NumericUpDown();
+            this.vGaugeNUD = new System.Windows.Forms.NumericUpDown();
+            this.hGaugeNUD = new System.Windows.Forms.NumericUpDown();
             this.ditherCB = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.gaugeTT = new System.Windows.Forms.ToolTip(this.components);
-            this.ofd = new System.Windows.Forms.OpenFileDialog();
-            this.hGaugeNUD = new System.Windows.Forms.NumericUpDown();
-            this.vGaugeNUD = new System.Windows.Forms.NumericUpDown();
-            this.rowCountNUD = new System.Windows.Forms.NumericUpDown();
-            this.lineThicknessNUD = new System.Windows.Forms.NumericUpDown();
-            this.stitchWidthNUD = new System.Windows.Forms.NumericUpDown();
-            this.negativeGridCB = new System.Windows.Forms.CheckBox();
-            this.sfd = new System.Windows.Forms.SaveFileDialog();
-            this.saveChartButton = new System.Windows.Forms.Button();
-            this.saveStockChartButton = new System.Windows.Forms.Button();
             this.mainStatusStrip = new System.Windows.Forms.StatusStrip();
             this.mainStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.gaugeTT = new System.Windows.Forms.ToolTip(this.components);
+            this.ofd = new System.Windows.Forms.OpenFileDialog();
+            this.sfd = new System.Windows.Forms.SaveFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             this.chartSettingsGB.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.hGaugeNUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.vGaugeNUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rowCountNUD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lineThicknessNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stitchWidthNUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lineThicknessNUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rowCountNUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vGaugeNUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hGaugeNUD)).BeginInit();
             this.mainStatusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -127,6 +127,32 @@ namespace ChartCreator
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "main";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // saveStockChartButton
+            // 
+            this.saveStockChartButton.Enabled = false;
+            this.saveStockChartButton.Location = new System.Drawing.Point(6, 304);
+            this.saveStockChartButton.Name = "saveStockChartButton";
+            this.saveStockChartButton.Size = new System.Drawing.Size(124, 30);
+            this.saveStockChartButton.TabIndex = 7;
+            this.saveStockChartButton.Text = "save stock. chart";
+            this.gaugeTT.SetToolTip(this.saveStockChartButton, "Save the stockinette chart to a file\r\n\r\nPlease do not include extension in file n" +
+        "ame!!\r\nFile will be saved as .png automatically");
+            this.saveStockChartButton.UseVisualStyleBackColor = true;
+            this.saveStockChartButton.Click += new System.EventHandler(this.saveStockChartButton_Click);
+            // 
+            // saveChartButton
+            // 
+            this.saveChartButton.Enabled = false;
+            this.saveChartButton.Location = new System.Drawing.Point(6, 268);
+            this.saveChartButton.Name = "saveChartButton";
+            this.saveChartButton.Size = new System.Drawing.Size(124, 30);
+            this.saveChartButton.TabIndex = 6;
+            this.saveChartButton.Text = "save chart";
+            this.gaugeTT.SetToolTip(this.saveChartButton, "Save the regular chart to a file\r\n\r\nPlease do not include extension in file name!" +
+        "!\r\nFile will be saved as .png automatically");
+            this.saveChartButton.UseVisualStyleBackColor = true;
+            this.saveChartButton.Click += new System.EventHandler(this.saveChartButton_Click);
             // 
             // showStockButton
             // 
@@ -291,6 +317,120 @@ namespace ChartCreator
             this.chartSettingsGB.TabStop = false;
             this.chartSettingsGB.Text = "chart settings";
             // 
+            // negativeGridCB
+            // 
+            this.negativeGridCB.AutoSize = true;
+            this.negativeGridCB.Location = new System.Drawing.Point(269, 44);
+            this.negativeGridCB.Name = "negativeGridCB";
+            this.negativeGridCB.Size = new System.Drawing.Size(87, 17);
+            this.negativeGridCB.TabIndex = 15;
+            this.negativeGridCB.Text = "negative grid";
+            this.gaugeTT.SetToolTip(this.negativeGridCB, "If checked, grid will be negative of the stitch color\r\n\r\nYou can use this if your" +
+        " yarns are very dark\r\nand the grid is not visible");
+            this.negativeGridCB.UseVisualStyleBackColor = true;
+            this.negativeGridCB.CheckedChanged += new System.EventHandler(this.negativeGridCB_CheckedChanged);
+            // 
+            // stitchWidthNUD
+            // 
+            this.stitchWidthNUD.Location = new System.Drawing.Point(200, 44);
+            this.stitchWidthNUD.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.stitchWidthNUD.Name = "stitchWidthNUD";
+            this.stitchWidthNUD.Size = new System.Drawing.Size(51, 20);
+            this.stitchWidthNUD.TabIndex = 14;
+            this.gaugeTT.SetToolTip(this.stitchWidthNUD, "Width of a single stitch in pixels\r\n\r\nThis mostly affects the quality of the stoc" +
+        "kinette preview.\r\nYou can leave this be");
+            this.stitchWidthNUD.Value = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            // 
+            // lineThicknessNUD
+            // 
+            this.lineThicknessNUD.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.lineThicknessNUD.Location = new System.Drawing.Point(201, 18);
+            this.lineThicknessNUD.Name = "lineThicknessNUD";
+            this.lineThicknessNUD.Size = new System.Drawing.Size(51, 20);
+            this.lineThicknessNUD.TabIndex = 13;
+            this.gaugeTT.SetToolTip(this.lineThicknessNUD, "Thickness of the grid");
+            this.lineThicknessNUD.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // rowCountNUD
+            // 
+            this.rowCountNUD.Location = new System.Drawing.Point(69, 70);
+            this.rowCountNUD.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.rowCountNUD.Name = "rowCountNUD";
+            this.rowCountNUD.Size = new System.Drawing.Size(51, 20);
+            this.rowCountNUD.TabIndex = 12;
+            this.gaugeTT.SetToolTip(this.rowCountNUD, "How many rows do you want your chart to have?");
+            this.rowCountNUD.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // vGaugeNUD
+            // 
+            this.vGaugeNUD.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.vGaugeNUD.Location = new System.Drawing.Point(69, 44);
+            this.vGaugeNUD.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.vGaugeNUD.Name = "vGaugeNUD";
+            this.vGaugeNUD.Size = new System.Drawing.Size(51, 20);
+            this.vGaugeNUD.TabIndex = 11;
+            this.gaugeTT.SetToolTip(this.vGaugeNUD, "how many rows are there in your square swatch?");
+            this.vGaugeNUD.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            // 
+            // hGaugeNUD
+            // 
+            this.hGaugeNUD.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.hGaugeNUD.Location = new System.Drawing.Point(69, 18);
+            this.hGaugeNUD.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.hGaugeNUD.Name = "hGaugeNUD";
+            this.hGaugeNUD.Size = new System.Drawing.Size(51, 20);
+            this.hGaugeNUD.TabIndex = 10;
+            this.gaugeTT.SetToolTip(this.hGaugeNUD, "How many stitches (horizontally) are there in your square swatch?");
+            this.hGaugeNUD.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
             // ditherCB
             // 
             this.ditherCB.AutoSize = true;
@@ -350,160 +490,6 @@ namespace ChartCreator
             this.label2.TabIndex = 2;
             this.label2.Text = "v. gauge";
             // 
-            // gaugeTT
-            // 
-            this.gaugeTT.AutoPopDelay = 5500;
-            this.gaugeTT.InitialDelay = 100;
-            this.gaugeTT.ReshowDelay = 110;
-            // 
-            // ofd
-            // 
-            this.ofd.FileName = "openFileDialog1";
-            // 
-            // hGaugeNUD
-            // 
-            this.hGaugeNUD.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.hGaugeNUD.Location = new System.Drawing.Point(69, 18);
-            this.hGaugeNUD.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.hGaugeNUD.Name = "hGaugeNUD";
-            this.hGaugeNUD.Size = new System.Drawing.Size(51, 20);
-            this.hGaugeNUD.TabIndex = 10;
-            this.gaugeTT.SetToolTip(this.hGaugeNUD, "How many stitches (horizontally) are there in your square swatch?");
-            this.hGaugeNUD.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            // 
-            // vGaugeNUD
-            // 
-            this.vGaugeNUD.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.vGaugeNUD.Location = new System.Drawing.Point(69, 44);
-            this.vGaugeNUD.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.vGaugeNUD.Name = "vGaugeNUD";
-            this.vGaugeNUD.Size = new System.Drawing.Size(51, 20);
-            this.vGaugeNUD.TabIndex = 11;
-            this.gaugeTT.SetToolTip(this.vGaugeNUD, "how many rows are there in your square swatch?");
-            this.vGaugeNUD.Value = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            // 
-            // rowCountNUD
-            // 
-            this.rowCountNUD.Location = new System.Drawing.Point(69, 70);
-            this.rowCountNUD.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.rowCountNUD.Name = "rowCountNUD";
-            this.rowCountNUD.Size = new System.Drawing.Size(51, 20);
-            this.rowCountNUD.TabIndex = 12;
-            this.gaugeTT.SetToolTip(this.rowCountNUD, "How many rows do you want your chart to have?");
-            this.rowCountNUD.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // lineThicknessNUD
-            // 
-            this.lineThicknessNUD.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.lineThicknessNUD.Location = new System.Drawing.Point(201, 18);
-            this.lineThicknessNUD.Name = "lineThicknessNUD";
-            this.lineThicknessNUD.Size = new System.Drawing.Size(51, 20);
-            this.lineThicknessNUD.TabIndex = 13;
-            this.gaugeTT.SetToolTip(this.lineThicknessNUD, "Thickness of the grid");
-            this.lineThicknessNUD.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // stitchWidthNUD
-            // 
-            this.stitchWidthNUD.Location = new System.Drawing.Point(200, 44);
-            this.stitchWidthNUD.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.stitchWidthNUD.Name = "stitchWidthNUD";
-            this.stitchWidthNUD.Size = new System.Drawing.Size(51, 20);
-            this.stitchWidthNUD.TabIndex = 14;
-            this.gaugeTT.SetToolTip(this.stitchWidthNUD, "Width of a single stitch in pixels\r\n\r\nThis mostly affects the quality of the stoc" +
-        "kinette preview.\r\nYou can leave this be");
-            this.stitchWidthNUD.Value = new decimal(new int[] {
-            40,
-            0,
-            0,
-            0});
-            // 
-            // negativeGridCB
-            // 
-            this.negativeGridCB.AutoSize = true;
-            this.negativeGridCB.Location = new System.Drawing.Point(269, 44);
-            this.negativeGridCB.Name = "negativeGridCB";
-            this.negativeGridCB.Size = new System.Drawing.Size(87, 17);
-            this.negativeGridCB.TabIndex = 15;
-            this.negativeGridCB.Text = "negative grid";
-            this.gaugeTT.SetToolTip(this.negativeGridCB, "If checked, grid will be negative of the stitch color\r\n\r\nYou can use this if your" +
-        " yarns are very dark\r\nand the grid is not visible");
-            this.negativeGridCB.UseVisualStyleBackColor = true;
-            // 
-            // sfd
-            // 
-            this.sfd.DefaultExt = "png";
-            this.sfd.FileName = "normalchart";
-            // 
-            // saveChartButton
-            // 
-            this.saveChartButton.Enabled = false;
-            this.saveChartButton.Location = new System.Drawing.Point(6, 268);
-            this.saveChartButton.Name = "saveChartButton";
-            this.saveChartButton.Size = new System.Drawing.Size(124, 30);
-            this.saveChartButton.TabIndex = 6;
-            this.saveChartButton.Text = "save chart";
-            this.gaugeTT.SetToolTip(this.saveChartButton, "Save the regular chart to a file\r\n\r\nPlease do not include extension in file name!" +
-        "!\r\nFile will be saved as .png automatically");
-            this.saveChartButton.UseVisualStyleBackColor = true;
-            this.saveChartButton.Click += new System.EventHandler(this.saveChartButton_Click);
-            // 
-            // saveStockChartButton
-            // 
-            this.saveStockChartButton.Enabled = false;
-            this.saveStockChartButton.Location = new System.Drawing.Point(6, 304);
-            this.saveStockChartButton.Name = "saveStockChartButton";
-            this.saveStockChartButton.Size = new System.Drawing.Size(124, 30);
-            this.saveStockChartButton.TabIndex = 7;
-            this.saveStockChartButton.Text = "save stock. chart";
-            this.gaugeTT.SetToolTip(this.saveStockChartButton, "Save the stockinette chart to a file\r\n\r\nPlease do not include extension in file n" +
-        "ame!!\r\nFile will be saved as .png automatically");
-            this.saveStockChartButton.UseVisualStyleBackColor = true;
-            this.saveStockChartButton.Click += new System.EventHandler(this.saveStockChartButton_Click);
-            // 
             // mainStatusStrip
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.mainStatusStrip, 2);
@@ -523,6 +509,21 @@ namespace ChartCreator
             this.mainStatusLabel.Text = "Hello there";
             this.mainStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // gaugeTT
+            // 
+            this.gaugeTT.AutoPopDelay = 5500;
+            this.gaugeTT.InitialDelay = 100;
+            this.gaugeTT.ReshowDelay = 110;
+            // 
+            // ofd
+            // 
+            this.ofd.FileName = "openFileDialog1";
+            // 
+            // sfd
+            // 
+            this.sfd.DefaultExt = "png";
+            this.sfd.FileName = "normalchart";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -540,11 +541,11 @@ namespace ChartCreator
             ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).EndInit();
             this.chartSettingsGB.ResumeLayout(false);
             this.chartSettingsGB.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.hGaugeNUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.vGaugeNUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rowCountNUD)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lineThicknessNUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stitchWidthNUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lineThicknessNUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rowCountNUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vGaugeNUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hGaugeNUD)).EndInit();
             this.mainStatusStrip.ResumeLayout(false);
             this.mainStatusStrip.PerformLayout();
             this.ResumeLayout(false);
