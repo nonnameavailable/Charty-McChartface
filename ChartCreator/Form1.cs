@@ -27,10 +27,6 @@ namespace ChartCreator
             charter.OriginalImage = new Bitmap(Properties.Resources.masterpiece);
             mainImage = charter.OriginalImage;
 
-            this.ResizeEnd += Form1_ResizeEnd;
-            yarnColorSelector firstYcs = new yarnColorSelector(charter.OriginalImage.GetPixel(0, 0));
-            firstYcs.IsPainting = true;
-            colorsFLP.Controls.Add(firstYcs);
             renderModeScroll = false;
             mainPictureBox.Dock = DockStyle.Fill;
             updatePictureBox();
@@ -38,9 +34,13 @@ namespace ChartCreator
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
 
+            this.ResizeEnd += Form1_ResizeEnd;
             sfd.FileOk += Sfd_FileOk;
             mainPictureBox.MouseClick += mainPictureBox_MouseClick;
             mainPictureBox.ContextMenuStrip = pictureCMS;
+            ditherCB.Click += DitherCB_Click;
+            negativeGridCB.Click += NegativeGridCB_Click;
+            numbersCB.Click += NumbersCB_Click;
         }
 
         private void Sfd_FileOk(object sender, CancelEventArgs e)
@@ -96,6 +96,42 @@ namespace ChartCreator
             return result;
         }
 
+        private bool createChart(bool newArray)
+        {
+            if (colorsFLP.Controls.Count == 0)
+            {
+                MessageBox.Show("Switch to the colors tab and add some colors first.");
+                return false;
+            }
+
+            charter.YarnColors = yarnColors();
+            charter.ReplacementYarnColors = replacementColors();
+            charter.NegativeGrid = negativeGridCB.Checked;
+            if (newArray)
+            {
+                if (DitherChart)
+                {
+                    charter.createChartArrayDithered(HGauge, VGauge, VCount);
+                }
+                else
+                {
+                    charter.createChartArray(HGauge, VGauge, VCount);
+                }
+            }
+            charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness, DrawNumbers);
+            mainImage = charter.Chart;
+            updatePictureBox();
+            return true;
+        }
+
+        private void removeAllColors()
+        {
+            for(int i = colorsFLP.Controls.Count - 1; i >= 0; i--)
+            {
+                colorsFLP.Controls.Remove(colorsFLP.Controls[i]);
+            }
+        }
+
         #region button event handlers
         private void addColorButton_Click(object sender, EventArgs e)
         {
@@ -106,7 +142,7 @@ namespace ChartCreator
 
         private void removeColorButton_Click(object sender, EventArgs e)
         {
-            if (colorsFLP.Controls.Count > 1)
+            if (colorsFLP.Controls.Count > 0)
             {
                 colorsFLP.Controls.Remove(colorsFLP.Controls[colorsFLP.Controls.Count - 1]);
             }
@@ -140,30 +176,30 @@ namespace ChartCreator
                 MessageBox.Show("You did not select an image file");
                 return;
             }
-                
+            removeAllColors();
             mainImage = charter.OriginalImage;
             updatePictureBox();
         }
 
         private void createChartButton_Click(object sender, EventArgs e)
         {
-            charter.YarnColors = yarnColors();
-            charter.ReplacementYarnColors = replacementColors();
-            if (DitherChart)
+            if(createChart(true))
             {
-                charter.createChartArrayDithered(HGauge, VGauge, VCount);
-            } else
-            {
-                charter.createChartArray(HGauge, VGauge, VCount);
+                return;
             }
-            charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness, DrawNumbers);
-            mainImage = charter.Chart;
-            updatePictureBox();
+            
             showChartButton.Enabled = true;
             saveChartButton.Enabled = true;
+
+            mainStatusLabel.Text = "Chart created. " + "width: " + HCount + " stitches; height: " + VCount + " stitches";
         }
         private void createStockChartButton_Click(object sender, EventArgs e)
         {
+            if (colorsFLP.Controls.Count == 0)
+            {
+                MessageBox.Show("Switch to the colors tab and add some colors first.");
+                return;
+            }
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
             if (DitherChart)
@@ -179,6 +215,7 @@ namespace ChartCreator
             updatePictureBox();
             showStockButton.Enabled = true;
             saveStockChartButton.Enabled = true;
+            mainStatusLabel.Text = "Chart created. " + "width: " + HCount + " stitches; height: " + VCount + " stitches";
         }
         private void showStockButton_Click(object sender, EventArgs e)
         {
@@ -246,7 +283,6 @@ namespace ChartCreator
         }
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
-            mainPictureBox.Invalidate();
             updatePictureBox();
         }
 
@@ -263,11 +299,28 @@ namespace ChartCreator
             mainPictureBox.Dock = DockStyle.None;
             updatePictureBox();
         }
-
-
-        private void negativeGridCB_CheckedChanged(object sender, EventArgs e)
+        private void NumbersCB_Click(object sender, EventArgs e)
         {
-            charter.NegativeGrid = negativeGridCB.Checked;
+            if (!createChart(false))
+            {
+                DrawNumbers = false;
+            }
+        }
+
+        private void NegativeGridCB_Click(object sender, EventArgs e)
+        {
+            if (!createChart(false))
+            {
+                NegativeGrid = false;
+            }
+        }
+
+        private void DitherCB_Click(object sender, EventArgs e)
+        {
+            if (!createChart(true))
+            {
+                DitherChart = false;
+            }
         }
         #endregion
 

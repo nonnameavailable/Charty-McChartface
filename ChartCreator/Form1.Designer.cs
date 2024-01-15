@@ -339,7 +339,6 @@ namespace ChartCreator
             this.gaugeTT.SetToolTip(this.negativeGridCB, "If checked, grid will be drawn in a contrasting color\r\n\r\nYou can use this if your" +
         " yarns are very dark\r\nand the grid is not visible");
             this.negativeGridCB.UseVisualStyleBackColor = true;
-            this.negativeGridCB.CheckedChanged += new System.EventHandler(this.negativeGridCB_CheckedChanged);
             // 
             // stitchWidthNUD
             // 
@@ -362,11 +361,6 @@ namespace ChartCreator
             // 
             // lineThicknessNUD
             // 
-            this.lineThicknessNUD.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
             this.lineThicknessNUD.Location = new System.Drawing.Point(201, 18);
             this.lineThicknessNUD.Name = "lineThicknessNUD";
             this.lineThicknessNUD.Size = new System.Drawing.Size(51, 20);
@@ -398,11 +392,6 @@ namespace ChartCreator
             // 
             // vGaugeNUD
             // 
-            this.vGaugeNUD.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
             this.vGaugeNUD.Location = new System.Drawing.Point(69, 44);
             this.vGaugeNUD.Maximum = new decimal(new int[] {
             1000,
@@ -421,11 +410,6 @@ namespace ChartCreator
             // 
             // hGaugeNUD
             // 
-            this.hGaugeNUD.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
             this.hGaugeNUD.Location = new System.Drawing.Point(69, 18);
             this.hGaugeNUD.Maximum = new decimal(new int[] {
             1000,
