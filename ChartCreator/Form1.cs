@@ -121,6 +121,8 @@ namespace ChartCreator
             charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness, DrawNumbers);
             mainImage = charter.Chart;
             updatePictureBox();
+            showChartButton.Enabled = true;
+            saveChartButton.Enabled = true;
             return true;
         }
 
@@ -183,14 +185,10 @@ namespace ChartCreator
 
         private void createChartButton_Click(object sender, EventArgs e)
         {
-            if(createChart(true))
+            if(!createChart(true))
             {
                 return;
             }
-            
-            showChartButton.Enabled = true;
-            saveChartButton.Enabled = true;
-
             mainStatusLabel.Text = "Chart created. " + "width: " + HCount + " stitches; height: " + VCount + " stitches";
         }
         private void createStockChartButton_Click(object sender, EventArgs e)
@@ -258,12 +256,26 @@ namespace ChartCreator
                 catch (ArgumentOutOfRangeException) { }
             } else
             {
+                if(colorsFLP.Controls.Count == 0)
+                {
+                    MessageBox.Show("Switch to the colors tab and add some colors first.");
+                    return;
+                }
                 double x = ((MouseEventArgs)e).X;
                 double y = ((MouseEventArgs)e).Y;
                 
                 int chartX = (int)(x / DispImgDims[0] * HCount);
                 int chartY = (int)(y / DispImgDims[1] * VCount);
-                Color paintC = charter.YarnColors[0];
+                Color paintC;
+                try
+                {
+                    paintC = charter.YarnColors[0];
+                } catch (ArgumentOutOfRangeException)
+                {
+                    MessageBox.Show("Please create the chart first :)");
+                    return;
+                }
+                
                 foreach(yarnColorSelector ycs in colorsFLP.Controls)
                 {
                     if (ycs.IsPainting)
@@ -272,9 +284,9 @@ namespace ChartCreator
                         break;
                     }
                 }
-                int paintColorIndex = charter.YarnColors.IndexOf(paintC);
                 charter.YarnColors = yarnColors();
                 charter.ReplacementYarnColors = replacementColors();
+                int paintColorIndex = charter.YarnColors.IndexOf(paintC);
                 charter.setGrid(chartX, chartY, paintColorIndex);
                 charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness, DrawNumbers);
                 mainImage = charter.Chart;

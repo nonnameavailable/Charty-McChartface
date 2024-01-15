@@ -43,7 +43,15 @@ namespace ChartCreator
 				{
 					int cx = (int)(i * sqWidth);
 					int cy = (int)(j * sqHeight);
-					Color stitchColor = replacementYarnColors[chartArray[j][i]];
+					Color stitchColor = Color.Black;
+                    try
+                    {
+						stitchColor = replacementYarnColors[chartArray[j][i]];
+					}
+                    catch (ArgumentOutOfRangeException)
+                    {
+						MessageBox.Show(replacementYarnColors.Count.ToString() + " x " + chartArray[j][i].ToString());
+					}
 					g.FillRectangle(new SolidBrush(stitchColor), cx, cy, (float)sqWidth, (float)sqHeight);
 					if (meshThickness > 0)
 					{
@@ -242,7 +250,17 @@ namespace ChartCreator
 			{
 				chartArray[y][x] = colorIndex;
 			}
-			catch (IndexOutOfRangeException) { }
+			catch (Exception ex)
+			{
+				if(ex is ArgumentOutOfRangeException)
+                {
+
+                } else if(ex is ArgumentNullException)
+                {
+					MessageBox.Show("Please create the chart first :)");
+					return;
+                }
+			}
 			
         }
         #region properties

@@ -435,8 +435,8 @@ namespace ChartCreator
             this.ditherCB.Size = new System.Drawing.Size(79, 17);
             this.ditherCB.TabIndex = 9;
             this.ditherCB.Text = "dither chart";
-            this.gaugeTT.SetToolTip(this.ditherCB, "If checked, chart will be dithered.\r\n\r\nThis will only have an effect, if your ori" +
-        "ginal image is a photo\r\nor something with smooth color transitions.");
+            this.gaugeTT.SetToolTip(this.ditherCB, "If checked, chart will be dithered.\r\n\r\nOnly makes sense to use this if your origi" +
+        "nal image is a photo\r\nor something with smooth color transitions.");
             this.ditherCB.UseVisualStyleBackColor = true;
             // 
             // label5
