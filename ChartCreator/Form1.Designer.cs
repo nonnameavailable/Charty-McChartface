@@ -176,6 +176,7 @@ namespace ChartCreator
             // 
             // createStockChartButton
             // 
+            this.createStockChartButton.Enabled = false;
             this.createStockChartButton.Location = new System.Drawing.Point(6, 78);
             this.createStockChartButton.Name = "createStockChartButton";
             this.createStockChartButton.Size = new System.Drawing.Size(124, 30);
@@ -266,9 +267,9 @@ namespace ChartCreator
             | System.Windows.Forms.AnchorStyles.Left)));
             this.colorsFLP.AutoScroll = true;
             this.colorsFLP.BackColor = System.Drawing.Color.Transparent;
-            this.colorsFLP.Location = new System.Drawing.Point(7, 58);
+            this.colorsFLP.Location = new System.Drawing.Point(7, 59);
             this.colorsFLP.Name = "colorsFLP";
-            this.colorsFLP.Size = new System.Drawing.Size(122, 291);
+            this.colorsFLP.Size = new System.Drawing.Size(122, 290);
             this.colorsFLP.TabIndex = 2;
             // 
             // removeColorButton

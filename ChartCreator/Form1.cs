@@ -123,6 +123,7 @@ namespace ChartCreator
             updatePictureBox();
             showChartButton.Enabled = true;
             saveChartButton.Enabled = true;
+            createStockChartButton.Enabled = true;
             return true;
         }
 
@@ -140,6 +141,7 @@ namespace ChartCreator
             colorsFLP.Controls.Add(new yarnColorSelector(Color.White));
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
+            createStockChartButton.Enabled = false;
         }
 
         private void removeColorButton_Click(object sender, EventArgs e)
@@ -150,6 +152,7 @@ namespace ChartCreator
             }
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
+            createStockChartButton.Enabled = false;
         }
 
         private void showChartButton_Click(object sender, EventArgs e)
@@ -200,14 +203,7 @@ namespace ChartCreator
             }
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
-            if (DitherChart)
-            {
-                charter.createChartArrayDithered(HGauge, VGauge, VCount);
-            }
-            else
-            {
-                charter.createChartArray(HGauge, VGauge, VCount);
-            }
+
             charter.generateStockinetteChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
             mainImage = charter.StockinetteChart;
             updatePictureBox();
@@ -313,7 +309,7 @@ namespace ChartCreator
         }
         private void NumbersCB_Click(object sender, EventArgs e)
         {
-            if (!createChart(false))
+            if (!createChart(true))
             {
                 DrawNumbers = false;
             }
@@ -321,7 +317,7 @@ namespace ChartCreator
 
         private void NegativeGridCB_Click(object sender, EventArgs e)
         {
-            if (!createChart(false))
+            if (!createChart(true))
             {
                 NegativeGrid = false;
             }
