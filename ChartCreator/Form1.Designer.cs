@@ -33,10 +33,8 @@ namespace ChartCreator
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.saveStockChartButton = new System.Windows.Forms.Button();
+            this.saveStitchedChartButton = new System.Windows.Forms.Button();
             this.saveChartButton = new System.Windows.Forms.Button();
-            this.showStockButton = new System.Windows.Forms.Button();
-            this.createStockChartButton = new System.Windows.Forms.Button();
             this.showImageButton = new System.Windows.Forms.Button();
             this.showChartButton = new System.Windows.Forms.Button();
             this.createChartButton = new System.Windows.Forms.Button();
@@ -71,6 +69,9 @@ namespace ChartCreator
             this.renderModeMI = new System.Windows.Forms.ToolStripMenuItem();
             this.renderFitMI = new System.Windows.Forms.ToolStripMenuItem();
             this.renderScrollMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.stitchChooserComboBox = new System.Windows.Forms.ComboBox();
+            this.createStitchChartButton = new System.Windows.Forms.Button();
+            this.showStitchChartButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -103,7 +104,7 @@ namespace ChartCreator
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(567, 413);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(567, 461);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tabControl1
@@ -115,15 +116,17 @@ namespace ChartCreator
             this.tabControl1.Name = "tabControl1";
             this.tableLayoutPanel1.SetRowSpan(this.tabControl1, 2);
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(144, 382);
+            this.tabControl1.Size = new System.Drawing.Size(144, 430);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.saveStockChartButton);
+            this.tabPage1.AutoScroll = true;
+            this.tabPage1.Controls.Add(this.showStitchChartButton);
+            this.tabPage1.Controls.Add(this.createStitchChartButton);
+            this.tabPage1.Controls.Add(this.stitchChooserComboBox);
+            this.tabPage1.Controls.Add(this.saveStitchedChartButton);
             this.tabPage1.Controls.Add(this.saveChartButton);
-            this.tabPage1.Controls.Add(this.showStockButton);
-            this.tabPage1.Controls.Add(this.createStockChartButton);
             this.tabPage1.Controls.Add(this.showImageButton);
             this.tabPage1.Controls.Add(this.showChartButton);
             this.tabPage1.Controls.Add(this.createChartButton);
@@ -131,28 +134,28 @@ namespace ChartCreator
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(136, 356);
+            this.tabPage1.Size = new System.Drawing.Size(136, 404);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "main";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // saveStockChartButton
+            // saveStitchedChartButton
             // 
-            this.saveStockChartButton.Enabled = false;
-            this.saveStockChartButton.Location = new System.Drawing.Point(6, 304);
-            this.saveStockChartButton.Name = "saveStockChartButton";
-            this.saveStockChartButton.Size = new System.Drawing.Size(124, 30);
-            this.saveStockChartButton.TabIndex = 7;
-            this.saveStockChartButton.Text = "save stock. chart";
-            this.gaugeTT.SetToolTip(this.saveStockChartButton, "Save the stockinette chart to a file\r\n\r\nPlease do not include extension in file n" +
+            this.saveStitchedChartButton.Enabled = false;
+            this.saveStitchedChartButton.Location = new System.Drawing.Point(7, 348);
+            this.saveStitchedChartButton.Name = "saveStitchedChartButton";
+            this.saveStitchedChartButton.Size = new System.Drawing.Size(123, 30);
+            this.saveStitchedChartButton.TabIndex = 7;
+            this.saveStitchedChartButton.Text = "save stitched chart";
+            this.gaugeTT.SetToolTip(this.saveStitchedChartButton, "Save the stockinette chart to a file\r\n\r\nPlease do not include extension in file n" +
         "ame!!\r\nFile will be saved as .png automatically");
-            this.saveStockChartButton.UseVisualStyleBackColor = true;
-            this.saveStockChartButton.Click += new System.EventHandler(this.saveStockChartButton_Click);
+            this.saveStitchedChartButton.UseVisualStyleBackColor = true;
+            this.saveStitchedChartButton.Click += new System.EventHandler(this.saveStockChartButton_Click);
             // 
             // saveChartButton
             // 
             this.saveChartButton.Enabled = false;
-            this.saveChartButton.Location = new System.Drawing.Point(6, 268);
+            this.saveChartButton.Location = new System.Drawing.Point(6, 312);
             this.saveChartButton.Name = "saveChartButton";
             this.saveChartButton.Size = new System.Drawing.Size(124, 30);
             this.saveChartButton.TabIndex = 6;
@@ -162,33 +165,9 @@ namespace ChartCreator
             this.saveChartButton.UseVisualStyleBackColor = true;
             this.saveChartButton.Click += new System.EventHandler(this.saveChartButton_Click);
             // 
-            // showStockButton
-            // 
-            this.showStockButton.Enabled = false;
-            this.showStockButton.Location = new System.Drawing.Point(6, 214);
-            this.showStockButton.Name = "showStockButton";
-            this.showStockButton.Size = new System.Drawing.Size(124, 30);
-            this.showStockButton.TabIndex = 5;
-            this.showStockButton.Text = "show stock. chart";
-            this.gaugeTT.SetToolTip(this.showStockButton, "If you have created a stockinette chart, this button will display a preview");
-            this.showStockButton.UseVisualStyleBackColor = true;
-            this.showStockButton.Click += new System.EventHandler(this.showStockButton_Click);
-            // 
-            // createStockChartButton
-            // 
-            this.createStockChartButton.Enabled = false;
-            this.createStockChartButton.Location = new System.Drawing.Point(6, 78);
-            this.createStockChartButton.Name = "createStockChartButton";
-            this.createStockChartButton.Size = new System.Drawing.Size(124, 30);
-            this.createStockChartButton.TabIndex = 2;
-            this.createStockChartButton.Text = "create stock. chart";
-            this.gaugeTT.SetToolTip(this.createStockChartButton, "Create and display a stockinette preview chart");
-            this.createStockChartButton.UseVisualStyleBackColor = true;
-            this.createStockChartButton.Click += new System.EventHandler(this.createStockChartButton_Click);
-            // 
             // showImageButton
             // 
-            this.showImageButton.Location = new System.Drawing.Point(6, 142);
+            this.showImageButton.Location = new System.Drawing.Point(7, 222);
             this.showImageButton.Name = "showImageButton";
             this.showImageButton.Size = new System.Drawing.Size(124, 30);
             this.showImageButton.TabIndex = 3;
@@ -200,7 +179,7 @@ namespace ChartCreator
             // showChartButton
             // 
             this.showChartButton.Enabled = false;
-            this.showChartButton.Location = new System.Drawing.Point(6, 178);
+            this.showChartButton.Location = new System.Drawing.Point(6, 186);
             this.showChartButton.Name = "showChartButton";
             this.showChartButton.Size = new System.Drawing.Size(124, 30);
             this.showChartButton.TabIndex = 4;
@@ -211,7 +190,7 @@ namespace ChartCreator
             // 
             // createChartButton
             // 
-            this.createChartButton.Location = new System.Drawing.Point(6, 42);
+            this.createChartButton.Location = new System.Drawing.Point(6, 62);
             this.createChartButton.Name = "createChartButton";
             this.createChartButton.Size = new System.Drawing.Size(124, 30);
             this.createChartButton.TabIndex = 1;
@@ -310,7 +289,7 @@ namespace ChartCreator
             this.chartSettingsGB.Controls.Add(this.label3);
             this.chartSettingsGB.Controls.Add(this.label1);
             this.chartSettingsGB.Controls.Add(this.label2);
-            this.chartSettingsGB.Location = new System.Drawing.Point(153, 271);
+            this.chartSettingsGB.Location = new System.Drawing.Point(153, 319);
             this.chartSettingsGB.Name = "chartSettingsGB";
             this.chartSettingsGB.Size = new System.Drawing.Size(411, 114);
             this.chartSettingsGB.TabIndex = 4;
@@ -390,6 +369,7 @@ namespace ChartCreator
             0,
             0,
             0});
+            this.rowCountNUD.ValueChanged += new System.EventHandler(this.rowCountNUD_ValueChanged);
             // 
             // vGaugeNUD
             // 
@@ -408,6 +388,7 @@ namespace ChartCreator
             0,
             0,
             0});
+            this.vGaugeNUD.ValueChanged += new System.EventHandler(this.vGaugeNUD_ValueChanged);
             // 
             // hGaugeNUD
             // 
@@ -422,10 +403,11 @@ namespace ChartCreator
             this.hGaugeNUD.TabIndex = 10;
             this.gaugeTT.SetToolTip(this.hGaugeNUD, "How many stitches (horizontally) are there in your square swatch?");
             this.hGaugeNUD.Value = new decimal(new int[] {
-            10,
+            15,
             0,
             0,
             0});
+            this.hGaugeNUD.ValueChanged += new System.EventHandler(this.hGaugeNUD_ValueChanged);
             // 
             // ditherCB
             // 
@@ -491,7 +473,7 @@ namespace ChartCreator
             this.tableLayoutPanel1.SetColumnSpan(this.mainStatusStrip, 2);
             this.mainStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mainStatusLabel});
-            this.mainStatusStrip.Location = new System.Drawing.Point(0, 391);
+            this.mainStatusStrip.Location = new System.Drawing.Point(0, 439);
             this.mainStatusStrip.Name = "mainStatusStrip";
             this.mainStatusStrip.Size = new System.Drawing.Size(567, 22);
             this.mainStatusStrip.TabIndex = 5;
@@ -512,7 +494,7 @@ namespace ChartCreator
             this.picturePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picturePanel.Location = new System.Drawing.Point(153, 3);
             this.picturePanel.Name = "picturePanel";
-            this.picturePanel.Size = new System.Drawing.Size(411, 262);
+            this.picturePanel.Size = new System.Drawing.Size(411, 310);
             this.picturePanel.TabIndex = 6;
             // 
             // mainPictureBox
@@ -520,7 +502,7 @@ namespace ChartCreator
             this.mainPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPictureBox.Location = new System.Drawing.Point(0, 0);
             this.mainPictureBox.Name = "mainPictureBox";
-            this.mainPictureBox.Size = new System.Drawing.Size(411, 262);
+            this.mainPictureBox.Size = new System.Drawing.Size(411, 310);
             this.mainPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.mainPictureBox.TabIndex = 0;
             this.mainPictureBox.TabStop = false;
@@ -572,11 +554,45 @@ namespace ChartCreator
             this.renderScrollMI.Text = "scroll";
             this.renderScrollMI.Click += new System.EventHandler(this.renderScrollMI_Click);
             // 
+            // stitchChooserComboBox
+            // 
+            this.stitchChooserComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.stitchChooserComboBox.FormattingEnabled = true;
+            this.stitchChooserComboBox.Items.AddRange(new object[] {
+            "Stockinette",
+            "Tunisian crochet"});
+            this.stitchChooserComboBox.Location = new System.Drawing.Point(8, 134);
+            this.stitchChooserComboBox.Name = "stitchChooserComboBox";
+            this.stitchChooserComboBox.Size = new System.Drawing.Size(121, 21);
+            this.stitchChooserComboBox.TabIndex = 8;
+            // 
+            // createStitchChartButton
+            // 
+            this.createStitchChartButton.Enabled = false;
+            this.createStitchChartButton.Location = new System.Drawing.Point(7, 98);
+            this.createStitchChartButton.Name = "createStitchChartButton";
+            this.createStitchChartButton.Size = new System.Drawing.Size(122, 30);
+            this.createStitchChartButton.TabIndex = 9;
+            this.createStitchChartButton.Text = "create stitched chart";
+            this.createStitchChartButton.UseVisualStyleBackColor = true;
+            this.createStitchChartButton.Click += new System.EventHandler(this.createStitchChartButton_Click);
+            // 
+            // showStitchChartButton
+            // 
+            this.showStitchChartButton.Enabled = false;
+            this.showStitchChartButton.Location = new System.Drawing.Point(7, 258);
+            this.showStitchChartButton.Name = "showStitchChartButton";
+            this.showStitchChartButton.Size = new System.Drawing.Size(124, 29);
+            this.showStitchChartButton.TabIndex = 10;
+            this.showStitchChartButton.Text = "show stitched chart";
+            this.showStitchChartButton.UseVisualStyleBackColor = true;
+            this.showStitchChartButton.Click += new System.EventHandler(this.showStitchChartButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(567, 413);
+            this.ClientSize = new System.Drawing.Size(567, 461);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "Chart Designer";
@@ -626,8 +642,6 @@ namespace ChartCreator
         private System.Windows.Forms.Button showChartButton;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button showStockButton;
-        private System.Windows.Forms.Button createStockChartButton;
         private System.Windows.Forms.CheckBox ditherCB;
         private System.Windows.Forms.NumericUpDown stitchWidthNUD;
         private System.Windows.Forms.NumericUpDown lineThicknessNUD;
@@ -636,7 +650,7 @@ namespace ChartCreator
         private System.Windows.Forms.NumericUpDown hGaugeNUD;
         private System.Windows.Forms.CheckBox negativeGridCB;
         private System.Windows.Forms.SaveFileDialog sfd;
-        private System.Windows.Forms.Button saveStockChartButton;
+        private System.Windows.Forms.Button saveStitchedChartButton;
         private System.Windows.Forms.Button saveChartButton;
         private System.Windows.Forms.StatusStrip mainStatusStrip;
         private System.Windows.Forms.ToolStripStatusLabel mainStatusLabel;
@@ -647,6 +661,9 @@ namespace ChartCreator
         private System.Windows.Forms.ToolStripMenuItem renderModeMI;
         private System.Windows.Forms.ToolStripMenuItem renderFitMI;
         private System.Windows.Forms.ToolStripMenuItem renderScrollMI;
+        private System.Windows.Forms.ComboBox stitchChooserComboBox;
+        private System.Windows.Forms.Button showStitchChartButton;
+        private System.Windows.Forms.Button createStitchChartButton;
     }
 }
 

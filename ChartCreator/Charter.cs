@@ -8,6 +8,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
+using ChartCreator.Properties;
 
 namespace ChartCreator
 {
@@ -17,13 +18,11 @@ namespace ChartCreator
 		private List<Color> yarnColors;
 		private List<Color> replacementYarnColors;
 		private Bitmap chart;
-		private Bitmap stockinetteChart;
-		private Bitmap stockinetteStitchImg;
+		private Bitmap stitchChart;
 		private int[][] chartArray;
 		private bool negativeGrid;
 		public Charter()
 		{
-			stockinetteStitchImg = new Bitmap(ChartCreator.Properties.Resources.stitch_stockinette_lerp);
 			NegativeGrid = false;
 		}
 
@@ -65,8 +64,8 @@ namespace ChartCreator
 						int curColIndex = chartArray[j][i];
 						if (curColIndex != prevColIndex || i == hCount - 1)
 						{
-							float sx = (float)(cx - sqWidth);
-							float sy = cy;
+							float sx = (float)(cx - sqWidth * 1.1);
+							float sy = cy - (float)(sqHeight * 0.06);
 							Color textColor = replacementYarnColors[chartArray[j][i - 1]];
 							if (i == hCount - 1)
                             {
@@ -75,9 +74,10 @@ namespace ChartCreator
 								textColor = stitchColor;
 							}
 							g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-							Font drawFont = new Font("Arial", (float)(sqHeight * 0.7));
+							String numberToDraw = csCounter.ToString();
+							Font drawFont = IP.fontToFitRect(numberToDraw, sqWidth, sqHeight, "Arial");
 							SolidBrush drawBrush = new SolidBrush(IP.contrastColor(textColor));
-							g.DrawString(csCounter.ToString(), drawFont, drawBrush, sx, sy);
+							g.DrawString(numberToDraw, drawFont, drawBrush, sx, sy);
 							csCounter = 1;
 						}
 						else
@@ -97,9 +97,9 @@ namespace ChartCreator
 			double chartWidth = sqWidth * hCount;
 			double chartHeight = sqHeight * vCount;
 
-			stockinetteChart = new Bitmap((int)chartWidth, (int)chartHeight);
-			Graphics scg = Graphics.FromImage(stockinetteChart);
-			List<Bitmap> yarnColorStitches = ycsList((int)sqWidth, (int)sqHeight);
+			stitchChart = new Bitmap((int)chartWidth, (int)chartHeight);
+			Graphics scg = Graphics.FromImage(stitchChart);
+			List<Bitmap> yarnColorStitches = ycsList((int)sqWidth, (int)sqHeight, Resources.stitch_stockinette_lerp, 1, 2);
 
 			for (int j = 0; j < vCount; j++)
 			{
@@ -107,32 +107,41 @@ namespace ChartCreator
 				{
 					int cx = (int)(i * sqWidth);
 					int cy = (int)(j * sqHeight);
-
 					scg.DrawImage(yarnColorStitches[chartArray[j][i]], cx, cy);
 				}
 			}
-			stockinetteChart.Save(Environment.CurrentDirectory + "\\stitched.png", ImageFormat.Png);
 			scg.Dispose();
 		}
 
-		private Bitmap coloredStitchImgLerp(int width, int height, Color c)
+		public void generateTunisianChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness)
 		{
-			Bitmap result = new Bitmap(width, (int)(height * 2));
-			Graphics g = Graphics.FromImage(result);
-			g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-			g.DrawImage(stockinetteStitchImg, 0, 0, result.Width, result.Height);
-			for (int j = 0; j < result.Height; j++)
+			double chartWidth = sqWidth * hCount;
+			double chartHeight = sqHeight * vCount;
+
+			stitchChart = new Bitmap((int)chartWidth, (int)chartHeight);
+			Graphics scg = Graphics.FromImage(stitchChart);
+			List<Bitmap> yarnColorStitches = ycsList((int)sqWidth, (int)sqHeight, Resources.stitch_tunisian, 1.1, 1.4);
+			List<Bitmap> yarnColorBackgrouns = ycsList((int)sqWidth, (int)sqHeight, Resources.background_stitch_tunisian, 1.1, 1.4);
+
+			for (int j = 0; j < vCount; j++)
 			{
-				for (int i = 0; i < result.Width; i++)
+				for (int i = 0; i < hCount; i++)
 				{
-					if (result.GetPixel(i, j).A > 0)
-					{
-						result.SetPixel(i, j, IP.lerpColor(c, Color.Black, (255 - result.GetPixel(i, j).R) / 255f));
-					}
+					int cx = (int)(i * sqWidth);
+					int cy = (int)(j * sqHeight);
+					scg.DrawImage(yarnColorBackgrouns[chartArray[j][i]], cx, cy);
 				}
 			}
-			g.Dispose();
-			return result;
+			for (int j = 0; j < vCount; j++)
+			{
+				for (int i = 0; i < hCount; i++)
+				{
+					int cx = (int)(i * sqWidth);
+					int cy = (int)(j * sqHeight);
+					scg.DrawImage(yarnColorStitches[chartArray[j][i]], cx, cy);
+				}
+			}
+			scg.Dispose();
 		}
 
 		public void createChartArray(double hGauge, double vGauge, int vCount)
@@ -234,12 +243,32 @@ namespace ChartCreator
 			return result;
 		}
 
-		private List<Bitmap> ycsList(int width, int height)
+		private Bitmap coloredStitchImgLerp(int width, int height, Color c, Bitmap stitchImg, double widthMultiplier, double heightMultiplier)
+		{
+			Bitmap result = new Bitmap((int)(width * widthMultiplier), (int)(height * heightMultiplier));
+			Graphics g = Graphics.FromImage(result);
+			g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+			g.DrawImage(stitchImg, 0, 0, result.Width, result.Height);
+			for (int j = 0; j < result.Height; j++)
+			{
+				for (int i = 0; i < result.Width; i++)
+				{
+					if (result.GetPixel(i, j).A > 0)
+					{
+						result.SetPixel(i, j, IP.lerpColor(c, Color.Black, (255 - result.GetPixel(i, j).R) / 255f));
+					}
+				}
+			}
+			g.Dispose();
+			return result;
+		}
+
+		private List<Bitmap> ycsList(int width, int height, Bitmap stitchImg, double widthMultiplier, double heightMultiplier)
         {
 			List<Bitmap> result = new List<Bitmap>();
 			foreach(Color c in replacementYarnColors)
             {
-				result.Add(coloredStitchImgLerp(width, height, c));
+				result.Add(coloredStitchImgLerp(width, height, c, stitchImg, widthMultiplier, heightMultiplier));
             }
 			return result;
         }
@@ -266,7 +295,7 @@ namespace ChartCreator
         #region properties
         public Bitmap OriginalImage { get => originalImage; set => originalImage = value; }
         public Bitmap Chart { get => chart; }
-		public Bitmap StockinetteChart { get => stockinetteChart; }
+		public Bitmap StitchChart { get => stitchChart; }
         public List<Color> YarnColors { get => yarnColors; set => yarnColors = value; }
         public List<Color> ReplacementYarnColors { get => replacementYarnColors; set => replacementYarnColors = value; }
         public bool NegativeGrid { get => negativeGrid; set => negativeGrid = value; }
@@ -275,14 +304,15 @@ namespace ChartCreator
         #region unused
         private Bitmap coloredStitchImgDithered(int width, int height, Color c)
 		{
-			Bitmap stitchCopy = (Bitmap)stockinetteStitchImg.Clone();
+
+			Bitmap stitchCopy = (Bitmap)Resources.stitch_stockinette.Clone();
 			Bitmap result = new Bitmap(width, (int)(height * 2.16));
 			Graphics g = Graphics.FromImage(result);
-			for (int j = 0; j < stockinetteStitchImg.Height; j++)
+			for (int j = 0; j < stitchCopy.Height; j++)
 			{
-				for (int i = 0; i < stockinetteStitchImg.Width; i++)
+				for (int i = 0; i < stitchCopy.Width; i++)
 				{
-					if (stockinetteStitchImg.GetPixel(i, j).ToArgb() == Color.White.ToArgb())
+					if (stitchCopy.GetPixel(i, j).ToArgb() == Color.White.ToArgb())
 					{
 						stitchCopy.SetPixel(i, j, c);
 					}

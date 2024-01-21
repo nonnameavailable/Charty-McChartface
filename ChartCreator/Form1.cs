@@ -41,6 +41,8 @@ namespace ChartCreator
             ditherCB.Click += DitherCB_Click;
             negativeGridCB.Click += NegativeGridCB_Click;
             numbersCB.Click += NumbersCB_Click;
+
+            stitchChooserComboBox.SelectedItem = "Stockinette";
         }
 
         private void Sfd_FileOk(object sender, CancelEventArgs e)
@@ -123,13 +125,13 @@ namespace ChartCreator
             updatePictureBox();
             showChartButton.Enabled = true;
             saveChartButton.Enabled = true;
-            createStockChartButton.Enabled = true;
+            createStitchChartButton.Enabled = true;
             return true;
         }
 
         private void removeAllColors()
         {
-            for(int i = colorsFLP.Controls.Count - 1; i >= 0; i--)
+            for (int i = colorsFLP.Controls.Count - 1; i >= 0; i--)
             {
                 colorsFLP.Controls.Remove(colorsFLP.Controls[i]);
             }
@@ -141,7 +143,7 @@ namespace ChartCreator
             colorsFLP.Controls.Add(new yarnColorSelector(Color.White));
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
-            createStockChartButton.Enabled = false;
+            createStitchChartButton.Enabled = false;
         }
 
         private void removeColorButton_Click(object sender, EventArgs e)
@@ -152,7 +154,7 @@ namespace ChartCreator
             }
             charter.YarnColors = yarnColors();
             charter.ReplacementYarnColors = replacementColors();
-            createStockChartButton.Enabled = false;
+            createStitchChartButton.Enabled = false;
         }
 
         private void showChartButton_Click(object sender, EventArgs e)
@@ -188,33 +190,11 @@ namespace ChartCreator
 
         private void createChartButton_Click(object sender, EventArgs e)
         {
-            if(!createChart(true))
+            if (!createChart(true))
             {
                 return;
             }
             mainStatusLabel.Text = "Chart created. " + "width: " + HCount + " stitches; height: " + VCount + " stitches";
-        }
-        private void createStockChartButton_Click(object sender, EventArgs e)
-        {
-            if (colorsFLP.Controls.Count == 0)
-            {
-                MessageBox.Show("Switch to the colors tab and add some colors first.");
-                return;
-            }
-            charter.YarnColors = yarnColors();
-            charter.ReplacementYarnColors = replacementColors();
-
-            charter.generateStockinetteChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
-            mainImage = charter.StockinetteChart;
-            updatePictureBox();
-            showStockButton.Enabled = true;
-            saveStockChartButton.Enabled = true;
-            mainStatusLabel.Text = "Chart created. " + "width: " + HCount + " stitches; height: " + VCount + " stitches";
-        }
-        private void showStockButton_Click(object sender, EventArgs e)
-        {
-            mainImage = charter.StockinetteChart;
-            updatePictureBox();
         }
         private void saveChartButton_Click(object sender, EventArgs e)
         {
@@ -233,9 +213,43 @@ namespace ChartCreator
             {
                 return;
             }
-            charter.StockinetteChart.Save(sfd.FileName, ImageFormat.Png);
+            charter.StitchChart.Save(sfd.FileName, ImageFormat.Png);
             mainStatusLabel.Text = "stock. chart saved under: " + sfd.FileName;
             sfd.FileName = Path.GetFileName(sfd.FileName);
+        }
+        private void createStitchChartButton_Click(object sender, EventArgs e)
+        {
+            if (colorsFLP.Controls.Count == 0)
+            {
+                MessageBox.Show("Switch to the colors tab and add some colors first.");
+                return;
+            }
+            charter.YarnColors = yarnColors();
+            charter.ReplacementYarnColors = replacementColors();
+            switch (SelectedStitch)
+            {
+                case "Stockinette":
+                    charter.generateStockinetteChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+                    break;
+
+                case "Tunisian crochet":
+                    charter.generateTunisianChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+                    break;
+                default:
+                    charter.generateStockinetteChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+                    break;
+
+            }
+            mainImage = charter.StitchChart;
+            updatePictureBox();
+            showStitchChartButton.Enabled = true;
+            saveStitchedChartButton.Enabled = true;
+            mainStatusLabel.Text = "Chart created. " + "width: " + HCount + " stitches; height: " + VCount + " stitches";
+        }
+        private void showStitchChartButton_Click(object sender, EventArgs e)
+        {
+            mainImage = charter.StitchChart;
+            updatePictureBox();
         }
         #endregion
 
@@ -252,14 +266,14 @@ namespace ChartCreator
                 catch (ArgumentOutOfRangeException) { }
             } else
             {
-                if(colorsFLP.Controls.Count == 0)
+                if (colorsFLP.Controls.Count == 0)
                 {
                     MessageBox.Show("Switch to the colors tab and add some colors first.");
                     return;
                 }
                 double x = ((MouseEventArgs)e).X;
                 double y = ((MouseEventArgs)e).Y;
-                
+
                 int chartX = (int)(x / DispImgDims[0] * HCount);
                 int chartY = (int)(y / DispImgDims[1] * VCount);
                 Color paintC;
@@ -271,8 +285,8 @@ namespace ChartCreator
                     MessageBox.Show("Please create the chart first :)");
                     return;
                 }
-                
-                foreach(yarnColorSelector ycs in colorsFLP.Controls)
+
+                foreach (yarnColorSelector ycs in colorsFLP.Controls)
                 {
                     if (ycs.IsPainting)
                     {
@@ -330,6 +344,23 @@ namespace ChartCreator
                 DitherChart = false;
             }
         }
+        private void hGaugeNUD_ValueChanged(object sender, EventArgs e)
+        {
+            createStitchChartButton.Enabled = false;
+            saveStitchedChartButton.Enabled = false;
+        }
+
+        private void vGaugeNUD_ValueChanged(object sender, EventArgs e)
+        {
+            createStitchChartButton.Enabled = false;
+            saveStitchedChartButton.Enabled = false;
+        }
+
+        private void rowCountNUD_ValueChanged(object sender, EventArgs e)
+        {
+            createStitchChartButton.Enabled = false;
+            saveStitchedChartButton.Enabled = false;
+        }
         #endregion
 
         #region properties
@@ -342,6 +373,7 @@ namespace ChartCreator
         public bool DitherChart { get => ditherCB.Checked; set => ditherCB.Checked = value; }
         public bool ClickColor { get => clickColorCB.Checked; set => clickColorCB.Checked = value; }
         public bool DrawNumbers { get => numbersCB.Checked; set => numbersCB.Checked = value; }
+        public string SelectedStitch { get => stitchChooserComboBox.SelectedItem.ToString(); }
         public double StitchHeight { get => StitchWidth * HGauge / VGauge; }
         public int HCount { get => (int)((double)charter.OriginalImage.Width / (double)charter.OriginalImage.Height * VCount * HGauge / VGauge); }
         public int[] DispImgDims

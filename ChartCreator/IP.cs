@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace ChartCreator
 {
@@ -37,6 +38,26 @@ namespace ChartCreator
             {
                 return Color.White;
             }
+        }
+
+        public static Font fontToFitRect(string str, double sqWidth, double sqHeight, string fontName)
+        {
+            float resultSize = (float)(sqHeight);
+            Font result = new Font(fontName, resultSize);
+            SizeF strSize = TextRenderer.MeasureText(str, result);
+            while (strSize.Height > sqHeight * 1.2)
+            {
+                resultSize *= 0.95F;
+                result = new Font(fontName, resultSize);
+                strSize = TextRenderer.MeasureText(str, result);
+            }
+            while (strSize.Width > sqWidth * 1.2)
+            {
+                resultSize *= 0.95F;
+                result = new Font(fontName, resultSize);
+                strSize = TextRenderer.MeasureText(str, result);
+            }
+            return result;
         }
     }
 }

@@ -141,5 +141,11 @@
   <ItemGroup>
     <None Include="Resources\stitch_stockinette_lerp.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stitch_tunisian.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background_stitch_tunisian.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

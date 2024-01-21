@@ -63,6 +63,16 @@ namespace ChartCreator.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap background_stitch_tunisian {
+            get {
+                object obj = ResourceManager.GetObject("background_stitch_tunisian", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap masterpiece {
             get {
                 object obj = ResourceManager.GetObject("masterpiece", resourceCulture);
@@ -86,6 +96,16 @@ namespace ChartCreator.Properties {
         internal static System.Drawing.Bitmap stitch_stockinette_lerp {
             get {
                 object obj = ResourceManager.GetObject("stitch_stockinette_lerp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap stitch_tunisian {
+            get {
+                object obj = ResourceManager.GetObject("stitch_tunisian", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
