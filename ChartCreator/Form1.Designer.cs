@@ -33,6 +33,9 @@ namespace ChartCreator
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.showStitchChartButton = new System.Windows.Forms.Button();
+            this.createStitchChartButton = new System.Windows.Forms.Button();
+            this.stitchChooserComboBox = new System.Windows.Forms.ComboBox();
             this.saveStitchedChartButton = new System.Windows.Forms.Button();
             this.saveChartButton = new System.Windows.Forms.Button();
             this.showImageButton = new System.Windows.Forms.Button();
@@ -69,9 +72,6 @@ namespace ChartCreator
             this.renderModeMI = new System.Windows.Forms.ToolStripMenuItem();
             this.renderFitMI = new System.Windows.Forms.ToolStripMenuItem();
             this.renderScrollMI = new System.Windows.Forms.ToolStripMenuItem();
-            this.stitchChooserComboBox = new System.Windows.Forms.ComboBox();
-            this.createStitchChartButton = new System.Windows.Forms.Button();
-            this.showStitchChartButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -138,6 +138,40 @@ namespace ChartCreator
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "main";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // showStitchChartButton
+            // 
+            this.showStitchChartButton.Enabled = false;
+            this.showStitchChartButton.Location = new System.Drawing.Point(7, 258);
+            this.showStitchChartButton.Name = "showStitchChartButton";
+            this.showStitchChartButton.Size = new System.Drawing.Size(124, 29);
+            this.showStitchChartButton.TabIndex = 10;
+            this.showStitchChartButton.Text = "show stitched chart";
+            this.showStitchChartButton.UseVisualStyleBackColor = true;
+            this.showStitchChartButton.Click += new System.EventHandler(this.showStitchChartButton_Click);
+            // 
+            // createStitchChartButton
+            // 
+            this.createStitchChartButton.Enabled = false;
+            this.createStitchChartButton.Location = new System.Drawing.Point(7, 98);
+            this.createStitchChartButton.Name = "createStitchChartButton";
+            this.createStitchChartButton.Size = new System.Drawing.Size(122, 30);
+            this.createStitchChartButton.TabIndex = 9;
+            this.createStitchChartButton.Text = "create stitched chart";
+            this.createStitchChartButton.UseVisualStyleBackColor = true;
+            this.createStitchChartButton.Click += new System.EventHandler(this.createStitchChartButton_Click);
+            // 
+            // stitchChooserComboBox
+            // 
+            this.stitchChooserComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.stitchChooserComboBox.FormattingEnabled = true;
+            this.stitchChooserComboBox.Items.AddRange(new object[] {
+            "Stockinette",
+            "Tunisian crochet"});
+            this.stitchChooserComboBox.Location = new System.Drawing.Point(8, 134);
+            this.stitchChooserComboBox.Name = "stitchChooserComboBox";
+            this.stitchChooserComboBox.Size = new System.Drawing.Size(121, 21);
+            this.stitchChooserComboBox.TabIndex = 8;
             // 
             // saveStitchedChartButton
             // 
@@ -220,7 +254,7 @@ namespace ChartCreator
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(136, 356);
+            this.tabPage2.Size = new System.Drawing.Size(136, 404);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "colors";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -553,40 +587,6 @@ namespace ChartCreator
             this.renderScrollMI.Size = new System.Drawing.Size(102, 22);
             this.renderScrollMI.Text = "scroll";
             this.renderScrollMI.Click += new System.EventHandler(this.renderScrollMI_Click);
-            // 
-            // stitchChooserComboBox
-            // 
-            this.stitchChooserComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.stitchChooserComboBox.FormattingEnabled = true;
-            this.stitchChooserComboBox.Items.AddRange(new object[] {
-            "Stockinette",
-            "Tunisian crochet"});
-            this.stitchChooserComboBox.Location = new System.Drawing.Point(8, 134);
-            this.stitchChooserComboBox.Name = "stitchChooserComboBox";
-            this.stitchChooserComboBox.Size = new System.Drawing.Size(121, 21);
-            this.stitchChooserComboBox.TabIndex = 8;
-            // 
-            // createStitchChartButton
-            // 
-            this.createStitchChartButton.Enabled = false;
-            this.createStitchChartButton.Location = new System.Drawing.Point(7, 98);
-            this.createStitchChartButton.Name = "createStitchChartButton";
-            this.createStitchChartButton.Size = new System.Drawing.Size(122, 30);
-            this.createStitchChartButton.TabIndex = 9;
-            this.createStitchChartButton.Text = "create stitched chart";
-            this.createStitchChartButton.UseVisualStyleBackColor = true;
-            this.createStitchChartButton.Click += new System.EventHandler(this.createStitchChartButton_Click);
-            // 
-            // showStitchChartButton
-            // 
-            this.showStitchChartButton.Enabled = false;
-            this.showStitchChartButton.Location = new System.Drawing.Point(7, 258);
-            this.showStitchChartButton.Name = "showStitchChartButton";
-            this.showStitchChartButton.Size = new System.Drawing.Size(124, 29);
-            this.showStitchChartButton.TabIndex = 10;
-            this.showStitchChartButton.Text = "show stitched chart";
-            this.showStitchChartButton.UseVisualStyleBackColor = true;
-            this.showStitchChartButton.Click += new System.EventHandler(this.showStitchChartButton_Click);
             // 
             // Form1
             // 

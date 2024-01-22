@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Imaging;
+using ChartCreator.Properties;
 
 namespace ChartCreator
 {
@@ -113,14 +114,17 @@ namespace ChartCreator
             {
                 if (DitherChart)
                 {
-                    charter.createChartArrayDithered(HGauge, VGauge, VCount);
+                    charter.createChartArrayDitheredSerpent(HGauge, VGauge, VCount);
                 }
                 else
                 {
                     charter.createChartArray(HGauge, VGauge, VCount);
                 }
             }
-            charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness, DrawNumbers);
+            if(!charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness, DrawNumbers))
+            {
+                return false;
+            }
             mainImage = charter.Chart;
             updatePictureBox();
             showChartButton.Enabled = true;
@@ -229,14 +233,14 @@ namespace ChartCreator
             switch (SelectedStitch)
             {
                 case "Stockinette":
-                    charter.generateStockinetteChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+                    charter.generateStitchedChart(StitchWidth, StitchHeight, Resources.background_stitch_tunisian, Resources.stitch_stockinette_lerp, 1, 2);
                     break;
 
                 case "Tunisian crochet":
-                    charter.generateTunisianChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+                    charter.generateStitchedChart(StitchWidth, StitchHeight, Resources.background_stitch_tunisian, Resources.stitch_tunisian, 1.1, 1.4);
                     break;
                 default:
-                    charter.generateStockinetteChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness);
+                    charter.generateStitchedChart(StitchWidth, StitchHeight, Resources.background_stitch_tunisian, Resources.stitch_stockinette_lerp, 1, 2);
                     break;
 
             }

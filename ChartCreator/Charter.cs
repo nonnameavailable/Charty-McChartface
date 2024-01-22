@@ -24,14 +24,25 @@ namespace ChartCreator
 		public Charter()
 		{
 			NegativeGrid = false;
+			chart = new Bitmap(50, 50);
+			stitchChart = new Bitmap(50, 50);
 		}
 
-		public void generateChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness, bool drawNumbers)
+		public bool generateChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness, bool drawNumbers)
 		{
+			chart.Dispose();
 			double chartWidth = sqWidth * hCount;
 			double chartHeight = sqHeight * vCount;
-
-			chart = new Bitmap((int)chartWidth, (int)chartHeight);
+            try
+            {
+				chart = new Bitmap((int)chartWidth, (int)chartHeight);
+			}
+            catch (ArgumentException)
+            {
+				MessageBox.Show("Your chart is probably too large :) Lower either stitch resolution or row count");
+				return false;
+            }
+			
 			Graphics g = Graphics.FromImage(chart);
 
 			for (int j = 0; j < vCount; j++)
@@ -90,39 +101,21 @@ namespace ChartCreator
 				}
 			}
 			g.Dispose();
+			return true;
 		}
 
-		public void generateStockinetteChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness)
+		public void generateStitchedChart(double sqWidth, double sqHeight, Bitmap stitchBackground, Bitmap stitch, double widthStretch, double heightStretch)
 		{
+			stitchChart.Dispose();
+			int hCount = chartArray[0].Length;
+			int vCount = chartArray.Length;
 			double chartWidth = sqWidth * hCount;
 			double chartHeight = sqHeight * vCount;
 
 			stitchChart = new Bitmap((int)chartWidth, (int)chartHeight);
 			Graphics scg = Graphics.FromImage(stitchChart);
-			List<Bitmap> yarnColorStitches = ycsList((int)sqWidth, (int)sqHeight, Resources.stitch_stockinette_lerp, 1, 2);
-
-			for (int j = 0; j < vCount; j++)
-			{
-				for (int i = 0; i < hCount; i++)
-				{
-					int cx = (int)(i * sqWidth);
-					int cy = (int)(j * sqHeight);
-					scg.DrawImage(yarnColorStitches[chartArray[j][i]], cx, cy);
-				}
-			}
-			scg.Dispose();
-		}
-
-		public void generateTunisianChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness)
-		{
-			double chartWidth = sqWidth * hCount;
-			double chartHeight = sqHeight * vCount;
-
-			stitchChart = new Bitmap((int)chartWidth, (int)chartHeight);
-			Graphics scg = Graphics.FromImage(stitchChart);
-			List<Bitmap> yarnColorStitches = ycsList((int)sqWidth, (int)sqHeight, Resources.stitch_tunisian, 1.1, 1.4);
-			List<Bitmap> yarnColorBackgrouns = ycsList((int)sqWidth, (int)sqHeight, Resources.background_stitch_tunisian, 1.1, 1.4);
-
+			List<Bitmap> yarnColorStitches = ycsList((int)sqWidth, (int)sqHeight, stitch, widthStretch, heightStretch);
+			List<Bitmap> yarnColorBackgrouns = ycsList((int)sqWidth, (int)sqHeight, stitchBackground, widthStretch, heightStretch);
 			for (int j = 0; j < vCount; j++)
 			{
 				for (int i = 0; i < hCount; i++)
@@ -164,65 +157,122 @@ namespace ChartCreator
 			}
 		}
 
-		public void createChartArrayDithered(double hGauge, double vGauge, int vCount)
+		public void createChartArrayDitheredSerpent(double hGauge, double vGauge, int vCount)
 		{
 			double whRatio = vGauge / hGauge;
 			int hCount = (int)((double)originalImage.Width / (double)originalImage.Height * vCount / whRatio);
 			chartArray = new int[vCount][];
 			double[,] errRow = new double[hCount, 3];
 			double[,] colRow = new double[hCount, 3];
+			int[] r = new int[hCount]; ;
 			for (int j = 0; j < vCount; j++)
 			{
-				int[] r = new int[hCount];
+				if (j % 2 == 1)
+				{
+					r = new int[hCount];
+					for (int i = 0; i < hCount; i++)
+					{
+						int x = (int)((double)(i + 0.5) / hCount * originalImage.Width);
+						int y = (int)((double)(j + 0.5) / vCount * originalImage.Height);
+						Color c = originalImage.GetPixel(x, y);
+						colRow[i, 0] = c.R / 255d + errRow[i, 0];
+						colRow[i, 1] = c.G / 255d + errRow[i, 1];
+						colRow[i, 2] = c.B / 255d + errRow[i, 2];
+					}
+					errRow = new double[hCount, 3];
+					for (int i = 0; i < hCount; i++)
+					{
+						double cR = colRow[i, 0];
+						double cG = colRow[i, 1];
+						double cB = colRow[i, 2];
+						Color curCol = Color.FromArgb(IP.clamp((int)(cR * 255), 0, 255), IP.clamp((int)(cG * 255), 0, 255), IP.clamp((int)(cB * 255), 0, 255));
+						int cci = closestYarnColorIndex(curCol);
+						r[i] = cci;
+						Color quCol = yarnColors[cci];
+						double qR = quCol.R / 255d;
+						double qG = quCol.G / 255d;
+						double qB = quCol.B / 255d;
+
+						double rDif = cR - qR;
+						double gDif = cG - qG;
+						double bDif = cB - qB;
+
+						if (i < hCount - 1)
+						{
+							colRow[i + 1, 0] += rDif * 7 / 16;
+							colRow[i + 1, 1] += gDif * 7 / 16;
+							colRow[i + 1, 2] += bDif * 7 / 16;
+
+							errRow[i + 1, 0] += rDif / 16;
+							errRow[i + 1, 1] += gDif / 16;
+							errRow[i + 1, 2] += bDif / 16;
+						}
+						if (i > 0)
+						{
+							errRow[i - 1, 0] += rDif * 3 / 16;
+							errRow[i - 1, 1] += gDif * 3 / 16;
+							errRow[i - 1, 2] += bDif * 3 / 16;
+						}
+
+						errRow[i, 0] += rDif * 5 / 16;
+						errRow[i, 1] += gDif * 5 / 16;
+						errRow[i, 2] += bDif * 5 / 16;
+					}
+				}
 				
-				for (int i = 0; i < hCount; i++)
-				{
-					int x = (int)((double)(i + 0.5) / hCount * originalImage.Width);
-					int y = (int)((double)(j + 0.5) / vCount * originalImage.Height);
-					Color c = originalImage.GetPixel(x, y);
-					colRow[i, 0] = c.R / 255d + errRow[i, 0];
-					colRow[i, 1] = c.G / 255d + errRow[i, 1];
-					colRow[i, 2] = c.B / 255d + errRow[i, 2];
-				}
-				errRow = new double[hCount, 3];
-				for (int i = 0; i < hCount; i++)
-				{
-					double cR = colRow[i, 0];
-					double cG = colRow[i, 1];
-					double cB = colRow[i, 2];
-					Color curCol = Color.FromArgb(IP.clamp((int)(cR * 255), 0, 255), IP.clamp((int)(cG * 255), 0, 255), IP.clamp((int)(cB * 255), 0, 255));
-					int cci = closestYarnColorIndex(curCol);
-					r[i] = cci;
-					Color quCol = yarnColors[cci];
-					double qR = quCol.R / 255d;
-					double qG = quCol.G / 255d;
-					double qB = quCol.B / 255d;
-
-                    double rDif = cR - qR;
-                    double gDif = cG - qG;
-                    double bDif = cB - qB;
-
-					if(i < hCount - 1)
-                    {
-						colRow[i + 1, 0] += rDif * 7 / 16;
-						colRow[i + 1, 1] += gDif * 7 / 16;
-						colRow[i + 1, 2] += bDif * 7 / 16;
-
-						errRow[i + 1, 0] += rDif / 16;
-						errRow[i + 1, 1] += gDif / 16;
-						errRow[i + 1, 2] += bDif / 16;
+				if(j % 2 == 0)
+                {
+					r = new int[hCount];
+					for (int i = hCount - 1; i >= 0; i--)
+					{
+						int x = (int)((double)(i + 0.5) / hCount * originalImage.Width);
+						int y = (int)((double)(j + 0.5) / vCount * originalImage.Height);
+						Color c = originalImage.GetPixel(x, y);
+						colRow[i, 0] = c.R / 255d + errRow[i, 0];
+						colRow[i, 1] = c.G / 255d + errRow[i, 1];
+						colRow[i, 2] = c.B / 255d + errRow[i, 2];
 					}
-					if(i > 0)
-                    {
-						errRow[i - 1, 0] += rDif * 3 / 16;
-						errRow[i - 1, 1] += gDif * 3 / 16;
-						errRow[i - 1, 2] += bDif * 3 / 16;
-					}
+					errRow = new double[hCount, 3];
+					for (int i = hCount - 1; i >= 0; i--)
+					{
+						double cR = colRow[i, 0];
+						double cG = colRow[i, 1];
+						double cB = colRow[i, 2];
+						Color curCol = Color.FromArgb(IP.clamp((int)(cR * 255), 0, 255), IP.clamp((int)(cG * 255), 0, 255), IP.clamp((int)(cB * 255), 0, 255));
+						int cci = closestYarnColorIndex(curCol);
+						r[i] = cci;
+						Color quCol = yarnColors[cci];
+						double qR = quCol.R / 255d;
+						double qG = quCol.G / 255d;
+						double qB = quCol.B / 255d;
 
-					errRow[i, 0] += rDif * 5d / 16;
-					errRow[i, 1] += gDif * 5d / 16;
-					errRow[i, 2] += bDif * 5d / 16;
+						double rDif = cR - qR;
+						double gDif = cG - qG;
+						double bDif = cB - qB;
+
+						if (i < hCount - 1)
+						{
+							colRow[i + 1, 0] += rDif * 7 / 16;
+							colRow[i + 1, 1] += gDif * 7 / 16;
+							colRow[i + 1, 2] += bDif * 7 / 16;
+
+							errRow[i + 1, 0] += rDif / 16;
+							errRow[i + 1, 1] += gDif / 16;
+							errRow[i + 1, 2] += bDif / 16;
+						}
+						if (i > 0)
+						{
+							errRow[i - 1, 0] += rDif * 3 / 16;
+							errRow[i - 1, 1] += gDif * 3 / 16;
+							errRow[i - 1, 2] += bDif * 3 / 16;
+						}
+
+						errRow[i, 0] += rDif * 5 / 16;
+						errRow[i, 1] += gDif * 5 / 16;
+						errRow[i, 2] += bDif * 5 / 16;
+					}
 				}
+				
 				chartArray[j] = r;
 			}
 		}
@@ -322,6 +372,68 @@ namespace ChartCreator
 			g.Dispose();
 			stitchCopy.Dispose();
 			return result;
+		}
+		public void createChartArrayDithered(double hGauge, double vGauge, int vCount)
+		{
+			double whRatio = vGauge / hGauge;
+			int hCount = (int)((double)originalImage.Width / (double)originalImage.Height * vCount / whRatio);
+			chartArray = new int[vCount][];
+			double[,] errRow = new double[hCount, 3];
+			double[,] colRow = new double[hCount, 3];
+			for (int j = 0; j < vCount; j++)
+			{
+				int[] r = new int[hCount];
+
+				for (int i = 0; i < hCount; i++)
+				{
+					int x = (int)((double)(i + 0.5) / hCount * originalImage.Width);
+					int y = (int)((double)(j + 0.5) / vCount * originalImage.Height);
+					Color c = originalImage.GetPixel(x, y);
+					colRow[i, 0] = c.R / 255d + errRow[i, 0];
+					colRow[i, 1] = c.G / 255d + errRow[i, 1];
+					colRow[i, 2] = c.B / 255d + errRow[i, 2];
+				}
+				errRow = new double[hCount, 3];
+				for (int i = 0; i < hCount; i++)
+				{
+					double cR = colRow[i, 0];
+					double cG = colRow[i, 1];
+					double cB = colRow[i, 2];
+					Color curCol = Color.FromArgb(IP.clamp((int)(cR * 255), 0, 255), IP.clamp((int)(cG * 255), 0, 255), IP.clamp((int)(cB * 255), 0, 255));
+					int cci = closestYarnColorIndex(curCol);
+					r[i] = cci;
+					Color quCol = yarnColors[cci];
+					double qR = quCol.R / 255d;
+					double qG = quCol.G / 255d;
+					double qB = quCol.B / 255d;
+
+					double rDif = cR - qR;
+					double gDif = cG - qG;
+					double bDif = cB - qB;
+
+					if (i < hCount - 1)
+					{
+						colRow[i + 1, 0] += rDif * 7 / 16;
+						colRow[i + 1, 1] += gDif * 7 / 16;
+						colRow[i + 1, 2] += bDif * 7 / 16;
+
+						errRow[i + 1, 0] += rDif / 16;
+						errRow[i + 1, 1] += gDif / 16;
+						errRow[i + 1, 2] += bDif / 16;
+					}
+					if (i > 0)
+					{
+						errRow[i - 1, 0] += rDif * 3 / 16;
+						errRow[i - 1, 1] += gDif * 3 / 16;
+						errRow[i - 1, 2] += bDif * 3 / 16;
+					}
+
+					errRow[i, 0] += rDif * 5 / 16;
+					errRow[i, 1] += gDif * 5 / 16;
+					errRow[i, 2] += bDif * 5 / 16;
+				}
+				chartArray[j] = r;
+			}
 		}
 		#endregion
 	}
