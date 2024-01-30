@@ -121,7 +121,7 @@ namespace ChartCreator
                     charter.createChartArray(HGauge, VGauge, VCount);
                 }
             }
-            if(!charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness, DrawNumbers))
+            if(!charter.generateChartFromArray(StitchWidth, StitchHeight, LineThickness, DrawNumbers))
             {
                 return false;
             }
@@ -302,7 +302,7 @@ namespace ChartCreator
                 charter.ReplacementYarnColors = replacementColors();
                 int paintColorIndex = charter.YarnColors.IndexOf(paintC);
                 charter.setGrid(chartX, chartY, paintColorIndex);
-                charter.generateChartFromArray(HCount, VCount, StitchWidth, StitchHeight, LineThickness, DrawNumbers);
+                charter.generateChartFromArray(StitchWidth, StitchHeight, LineThickness, DrawNumbers);
                 mainImage = charter.Chart;
                 updatePictureBox();
             }
@@ -327,7 +327,7 @@ namespace ChartCreator
         }
         private void NumbersCB_Click(object sender, EventArgs e)
         {
-            if (!createChart(true))
+            if (!createChart(false))
             {
                 DrawNumbers = false;
             }
@@ -335,7 +335,7 @@ namespace ChartCreator
 
         private void NegativeGridCB_Click(object sender, EventArgs e)
         {
-            if (!createChart(true))
+            if (!createChart(false))
             {
                 NegativeGrid = false;
             }

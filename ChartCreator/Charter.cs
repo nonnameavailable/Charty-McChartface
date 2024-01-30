@@ -28,9 +28,11 @@ namespace ChartCreator
 			stitchChart = new Bitmap(50, 50);
 		}
 
-		public bool generateChartFromArray(int hCount, int vCount, double sqWidth, double sqHeight, double meshThickness, bool drawNumbers)
+		public bool generateChartFromArray(double sqWidth, double sqHeight, double meshThickness, bool drawNumbers)
 		{
 			chart.Dispose();
+			int hCount = chartArray[0].Length;
+			int vCount = chartArray.Length;
 			double chartWidth = sqWidth * hCount;
 			double chartHeight = sqHeight * vCount;
             try
