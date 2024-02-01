@@ -36,6 +36,7 @@ namespace ChartCreator
             {
                 IsPainting = true;
             }
+            ((Form1)this.FindForm()).ClickColor = false;
         }
 
         private void selectColorButton_Click(object sender, EventArgs e)
