@@ -54,6 +54,7 @@ namespace ChartCreator
         {
             yarnColorDialog.ShowDialog();
             replacementColorButton.BackColor = yarnColorDialog.Color;
+            ((Form1)this.FindForm()).createChart(false);
         }
 
     }

@@ -372,6 +372,7 @@ namespace ChartCreator
             0,
             0,
             0});
+            this.stitchWidthNUD.ValueChanged += new System.EventHandler(this.stitchWidthNUD_ValueChanged);
             // 
             // lineThicknessNUD
             // 

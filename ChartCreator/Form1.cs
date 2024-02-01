@@ -99,7 +99,7 @@ namespace ChartCreator
             return result;
         }
 
-        private bool createChart(bool newArray)
+        public bool createChart(bool newArray)
         {
             if (colorsFLP.Controls.Count == 0)
             {
@@ -398,5 +398,10 @@ namespace ChartCreator
             }        
         }
         #endregion
+
+        private void stitchWidthNUD_ValueChanged(object sender, EventArgs e)
+        {
+            createChart(false);
+        }
     }
 }
