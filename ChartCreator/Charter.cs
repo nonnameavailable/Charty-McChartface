@@ -30,8 +30,17 @@ namespace ChartCreator
 
 		public bool generateChartFromArray(double sqWidth, double sqHeight, double meshThickness, bool drawNumbers)
 		{
+			int hCount = 0;
+			try
+            {
+				hCount = chartArray[0].Length;
+			} catch (NullReferenceException)
+            {
+				MessageBox.Show("Please create the chart first");
+				return false;
+            }
 			chart.Dispose();
-			int hCount = chartArray[0].Length;
+
 			int vCount = chartArray.Length;
 			double chartWidth = sqWidth * hCount;
 			double chartHeight = sqHeight * vCount;
@@ -62,7 +71,8 @@ namespace ChartCreator
 					}
                     catch (ArgumentOutOfRangeException)
                     {
-						MessageBox.Show(replacementYarnColors.Count.ToString() + " x " + chartArray[j][i].ToString());
+						MessageBox.Show("You most likely added or removed colors." + System.Environment.NewLine + "You must always use the create chart button after doing this");
+						return false;
 					}
 					g.FillRectangle(new SolidBrush(stitchColor), cx, cy, (float)sqWidth, (float)sqHeight);
 					if (meshThickness > 0)
