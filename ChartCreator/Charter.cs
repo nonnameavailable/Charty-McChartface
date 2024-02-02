@@ -162,7 +162,7 @@ namespace ChartCreator
 					int x = (int)((double)(i + 0.5) / hCount * originalImage.Width);
 					int y = (int)((double)(j + 0.5) / vCount * originalImage.Height);
 					Color curCol = originalImage.GetPixel(x, y);
-					int cci = closestYarnColorIndex(curCol);
+					int cci = closestYarnColorIndexLab(curCol);
 					r[i] =  cci;
 				}
 				chartArray[j] = r;
@@ -194,7 +194,7 @@ namespace ChartCreator
 					double dG = IP.clamp(c.G / 255d + right[1] + errRow[i, 1], 0, 1);
 					double dB = IP.clamp(c.B / 255d + right[2] + errRow[i, 2], 0, 1);
 					Color curCol = Color.FromArgb((int)(dR * 255), (int)(dG * 255), (int)(dB * 255));
-					int cci = closestYarnColorIndex(curCol);
+					int cci = closestYarnColorIndexLab(curCol);
 					r[i] = cci;
 					Color quCol = yarnColors[cci];
 
@@ -232,17 +232,17 @@ namespace ChartCreator
 			}
 		}
 
-		private int closestYarnColorIndex(Color tc)
+		private int closestYarnColorIndexLab(Color tc)
 		{
 			int result = 0;
-			int dif = 765;
-			for(int i = 0; i < yarnColors.Count; i++)
-            {
+			double lDist = 10000;
+			for (int i = 0; i < yarnColors.Count; i++)
+			{
 				Color yc = yarnColors[i];
-				int cdif = Math.Abs(yc.R - tc.R) + Math.Abs(yc.G - tc.G) + Math.Abs(yc.B - tc.B);
-				if (cdif < dif)
+				double cDist = CC.deltaE(yc, tc);
+				if (cDist < lDist)
 				{
-					dif = cdif;
+					lDist = cDist;
 					result = i;
 				}
 			}
@@ -329,6 +329,42 @@ namespace ChartCreator
 			stitchCopy.Dispose();
 			return result;
 		}
-        #endregion
-    }
+
+		private int closestYarnColorIndex(Color tc)
+		{
+			int result = 0;
+			int dif = 765;
+			for (int i = 0; i < yarnColors.Count; i++)
+			{
+				Color yc = yarnColors[i];
+				int cdif = Math.Abs(yc.R - tc.R) + Math.Abs(yc.G - tc.G) + Math.Abs(yc.B - tc.B);
+				if (cdif < dif)
+				{
+					dif = cdif;
+					result = i;
+				}
+			}
+			return result;
+		}
+		private int closestYarnColorIndexBetter(Color tc)
+		{
+			int result = 0;
+			double lDist = 10000;
+			for (int i = 0; i < yarnColors.Count; i++)
+			{
+				Color yc = yarnColors[i];
+				double rDif = Math.Abs(yc.R - tc.R);
+				double gDif = Math.Abs(yc.G - tc.G);
+				double bDif = Math.Abs(yc.B - tc.B);
+				double cDist = Math.Sqrt(Math.Pow(Math.Sqrt(rDif * rDif + gDif * gDif), 2) + bDif * bDif);
+				if (cDist < lDist)
+				{
+					lDist = cDist;
+					result = i;
+				}
+			}
+			return result;
+		}
+		#endregion
+	}
 }
