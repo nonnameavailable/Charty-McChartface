@@ -298,6 +298,64 @@ namespace ChartCreator
 			}
 			
         }
+
+		public void autoCorrect(int distThreshold, int countThreshold)
+        {
+			int[][] newChartArray = (int[][])chartArray.Clone();
+			for(int j = 0; j < chartArray.Length; j++)
+            {
+				for(int i = 0; i < chartArray[0].Length; i++)
+                {
+					int[] dcfac = dupeCountForAutoCorrect(i, j, distThreshold, countThreshold);
+					int dupeCount = dcfac[0];
+					int replacementIndex = dcfac[1];
+					if(dupeCount <= countThreshold)
+                    {
+						newChartArray[j][i] = replacementIndex;
+                    }
+                }
+            }
+			chartArray = newChartArray;
+        }
+		private int[] dupeCountForAutoCorrect(int x, int y, int distThreshold, int countThreshold)
+        {
+			int testedIndex = chartArray[y][x];
+			int[] result = new int[2];
+			Dictionary<int, int> colorCounts = new Dictionary<int, int>();
+
+			for(int j = y - distThreshold; j <= y + distThreshold; j++)
+            {
+				for(int i = x - distThreshold; i <= x + distThreshold; i++)
+                {
+					if(!(i == x && j == y))
+                    {
+                        try
+                        {
+							int currentIndex = chartArray[j][i];
+							if (currentIndex == testedIndex) result[0]++;
+							if (result[0] > countThreshold) return result;
+                            if (colorCounts.TryGetValue(currentIndex, out int value))
+							{
+								value++;
+								colorCounts[currentIndex] = value;
+							}
+							else
+							{
+								colorCounts.Add(currentIndex, 1);
+							}
+						}
+                        catch (IndexOutOfRangeException)
+                        {
+							//do nothing and continue
+                        }
+						
+					}
+                }
+            }
+			//returns the index with highest count. I don't understand this at all, ripped from Stack Overflow
+			result[1] = colorCounts.Aggregate((xx, yy) => xx.Value > yy.Value ? xx : yy).Key;
+			return result;
+        }
         #region properties
         public Bitmap OriginalImage { get => originalImage; set => originalImage = value; }
         public Bitmap Chart { get => chart; }

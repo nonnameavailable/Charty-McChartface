@@ -373,6 +373,8 @@ namespace ChartCreator
         public int VCount { get => (int)rowCountNUD.Value; set => rowCountNUD.Value = (decimal)value; }
         public double LineThickness { get => (double)lineThicknessNUD.Value; set => lineThicknessNUD.Value = (decimal)value; }
         public double StitchWidth { get => (double)stitchWidthNUD.Value; set => stitchWidthNUD.Value = (decimal)value; }
+        public int DistanceThreshold { get => (int)distThresholdNUD.Value; set => distThresholdNUD.Value = value; }
+        public int CountThreshold { get => (int)countThresholdNUD.Value; set => countThresholdNUD.Value = value; }
         public bool NegativeGrid { get => negativeGridCB.Checked; set => negativeGridCB.Checked = value; }
         public bool DitherChart { get => ditherCB.Checked; set => ditherCB.Checked = value; }
         public bool ClickColor { get => clickColorCB.Checked; set => clickColorCB.Checked = value; }
@@ -401,6 +403,12 @@ namespace ChartCreator
 
         private void stitchWidthNUD_ValueChanged(object sender, EventArgs e)
         {
+            createChart(false);
+        }
+
+        private void autoCorrectButton_Click(object sender, EventArgs e)
+        {
+            charter.autoCorrect(DistanceThreshold, CountThreshold);
             createChart(false);
         }
     }

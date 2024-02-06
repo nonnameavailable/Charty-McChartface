@@ -47,6 +47,12 @@ namespace ChartCreator
             this.colorsFLP = new System.Windows.Forms.FlowLayoutPanel();
             this.removeColorButton = new System.Windows.Forms.Button();
             this.addColorButton = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.countThresholdNUD = new System.Windows.Forms.NumericUpDown();
+            this.distThresholdNUD = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.autoCorrectButton = new System.Windows.Forms.Button();
             this.chartSettingsGB = new System.Windows.Forms.GroupBox();
             this.numbersCB = new System.Windows.Forms.CheckBox();
             this.negativeGridCB = new System.Windows.Forms.CheckBox();
@@ -76,6 +82,9 @@ namespace ChartCreator
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.countThresholdNUD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.distThresholdNUD)).BeginInit();
             this.chartSettingsGB.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stitchWidthNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lineThicknessNUD)).BeginInit();
@@ -111,6 +120,7 @@ namespace ChartCreator
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
@@ -142,7 +152,7 @@ namespace ChartCreator
             // showStitchChartButton
             // 
             this.showStitchChartButton.Enabled = false;
-            this.showStitchChartButton.Location = new System.Drawing.Point(7, 258);
+            this.showStitchChartButton.Location = new System.Drawing.Point(6, 314);
             this.showStitchChartButton.Name = "showStitchChartButton";
             this.showStitchChartButton.Size = new System.Drawing.Size(124, 29);
             this.showStitchChartButton.TabIndex = 10;
@@ -153,7 +163,7 @@ namespace ChartCreator
             // createStitchChartButton
             // 
             this.createStitchChartButton.Enabled = false;
-            this.createStitchChartButton.Location = new System.Drawing.Point(7, 98);
+            this.createStitchChartButton.Location = new System.Drawing.Point(6, 154);
             this.createStitchChartButton.Name = "createStitchChartButton";
             this.createStitchChartButton.Size = new System.Drawing.Size(122, 30);
             this.createStitchChartButton.TabIndex = 9;
@@ -168,7 +178,7 @@ namespace ChartCreator
             this.stitchChooserComboBox.Items.AddRange(new object[] {
             "Stockinette",
             "Tunisian crochet"});
-            this.stitchChooserComboBox.Location = new System.Drawing.Point(8, 134);
+            this.stitchChooserComboBox.Location = new System.Drawing.Point(7, 190);
             this.stitchChooserComboBox.Name = "stitchChooserComboBox";
             this.stitchChooserComboBox.Size = new System.Drawing.Size(121, 21);
             this.stitchChooserComboBox.TabIndex = 8;
@@ -176,7 +186,7 @@ namespace ChartCreator
             // saveStitchedChartButton
             // 
             this.saveStitchedChartButton.Enabled = false;
-            this.saveStitchedChartButton.Location = new System.Drawing.Point(7, 348);
+            this.saveStitchedChartButton.Location = new System.Drawing.Point(6, 404);
             this.saveStitchedChartButton.Name = "saveStitchedChartButton";
             this.saveStitchedChartButton.Size = new System.Drawing.Size(123, 30);
             this.saveStitchedChartButton.TabIndex = 7;
@@ -189,7 +199,7 @@ namespace ChartCreator
             // saveChartButton
             // 
             this.saveChartButton.Enabled = false;
-            this.saveChartButton.Location = new System.Drawing.Point(6, 312);
+            this.saveChartButton.Location = new System.Drawing.Point(5, 368);
             this.saveChartButton.Name = "saveChartButton";
             this.saveChartButton.Size = new System.Drawing.Size(124, 30);
             this.saveChartButton.TabIndex = 6;
@@ -201,7 +211,7 @@ namespace ChartCreator
             // 
             // showImageButton
             // 
-            this.showImageButton.Location = new System.Drawing.Point(7, 222);
+            this.showImageButton.Location = new System.Drawing.Point(6, 278);
             this.showImageButton.Name = "showImageButton";
             this.showImageButton.Size = new System.Drawing.Size(124, 30);
             this.showImageButton.TabIndex = 3;
@@ -213,7 +223,7 @@ namespace ChartCreator
             // showChartButton
             // 
             this.showChartButton.Enabled = false;
-            this.showChartButton.Location = new System.Drawing.Point(6, 186);
+            this.showChartButton.Location = new System.Drawing.Point(5, 242);
             this.showChartButton.Name = "showChartButton";
             this.showChartButton.Size = new System.Drawing.Size(124, 30);
             this.showChartButton.TabIndex = 4;
@@ -307,6 +317,79 @@ namespace ChartCreator
         "to pick color from the image");
             this.addColorButton.UseVisualStyleBackColor = true;
             this.addColorButton.Click += new System.EventHandler(this.addColorButton_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.countThresholdNUD);
+            this.tabPage3.Controls.Add(this.distThresholdNUD);
+            this.tabPage3.Controls.Add(this.label7);
+            this.tabPage3.Controls.Add(this.label6);
+            this.tabPage3.Controls.Add(this.autoCorrectButton);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(136, 404);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "corr.";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // countThresholdNUD
+            // 
+            this.countThresholdNUD.Location = new System.Drawing.Point(84, 68);
+            this.countThresholdNUD.Name = "countThresholdNUD";
+            this.countThresholdNUD.Size = new System.Drawing.Size(46, 20);
+            this.countThresholdNUD.TabIndex = 17;
+            this.gaugeTT.SetToolTip(this.countThresholdNUD, "The higher this number is, the more corrections will be performed\r\nIncresing this" +
+        " will reduce detail in the chart drastically\r\n\r\n");
+            // 
+            // distThresholdNUD
+            // 
+            this.distThresholdNUD.Location = new System.Drawing.Point(84, 42);
+            this.distThresholdNUD.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.distThresholdNUD.Name = "distThresholdNUD";
+            this.distThresholdNUD.Size = new System.Drawing.Size(46, 20);
+            this.distThresholdNUD.TabIndex = 16;
+            this.gaugeTT.SetToolTip(this.distThresholdNUD, "The higher this number is, the less corrections will be performed\r\n\r\nIf the autoc" +
+        "orrect is removing too much detail from the chart,\r\ntry increasing this number");
+            this.distThresholdNUD.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 71);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(80, 13);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "count threshold";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 45);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(72, 13);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "dist. threshold";
+            // 
+            // autoCorrectButton
+            // 
+            this.autoCorrectButton.Location = new System.Drawing.Point(6, 6);
+            this.autoCorrectButton.Name = "autoCorrectButton";
+            this.autoCorrectButton.Size = new System.Drawing.Size(124, 30);
+            this.autoCorrectButton.TabIndex = 11;
+            this.autoCorrectButton.Text = "autocorrect";
+            this.gaugeTT.SetToolTip(this.autoCorrectButton, "This button will attempt to get rid of \"stray\" stitches\r\nusually caused by anti-a" +
+        "liasing in the original image");
+            this.autoCorrectButton.UseVisualStyleBackColor = true;
+            this.autoCorrectButton.Click += new System.EventHandler(this.autoCorrectButton_Click);
             // 
             // chartSettingsGB
             // 
@@ -603,6 +686,10 @@ namespace ChartCreator
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.countThresholdNUD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.distThresholdNUD)).EndInit();
             this.chartSettingsGB.ResumeLayout(false);
             this.chartSettingsGB.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stitchWidthNUD)).EndInit();
@@ -665,6 +752,12 @@ namespace ChartCreator
         private System.Windows.Forms.ComboBox stitchChooserComboBox;
         private System.Windows.Forms.Button showStitchChartButton;
         private System.Windows.Forms.Button createStitchChartButton;
+        private System.Windows.Forms.Button autoCorrectButton;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown countThresholdNUD;
+        private System.Windows.Forms.NumericUpDown distThresholdNUD;
     }
 }
 
