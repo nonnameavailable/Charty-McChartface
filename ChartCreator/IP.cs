@@ -60,68 +60,6 @@ namespace ChartCreator
             }
             return result;
         }
-		
-		public static void ditheredImage(Bitmap source)
-		{
-			double ri = 7 / 16d;
-			double rd = 1 / 16d;
-			double d = 5 / 16d;
-			double ld = 3 / 16d;
-			double[,] errRow = new double[source.Width, 3];
-			double[] right = new double[3];
-			Bitmap result = new Bitmap(source.Width, source.Height);
-			List<Color> palette = new List<Color>();
-			palette.Add(Color.FromArgb(0, 0, 0));
-			palette.Add(Color.FromArgb(255, 255, 255));
-			for (int j = 0; j < source.Height; j++)
-			{
-				double[,] newErrRow = new double[source.Width, 3];
-				bool forward = j % 2 == 0;
-				for (int i = (forward ? 0 : source.Width - 1); forward ? i < source.Width : i >= 0; i += (forward ? 1 : -1))
-				{
-					int x = (int)((double)(i) / source.Width * source.Width);
-					int y = (int)((double)(j) / source.Height * source.Height);
-					Color c = source.GetPixel(x, y);
-					double dR = clamp(c.R / 255d + right[0] + errRow[i, 0], 0, 1); //CLAMPING SHIFTED HERE
-					double dG = clamp(c.G / 255d + right[1] + errRow[i, 1], 0, 1); //AND HERE
-					double dB = clamp(c.B / 255d + right[2] + errRow[i, 2], 0, 1); //AND HERE
-					Color curCol = Color.FromArgb((int)(dR * 255), (int)(dG * 255), (int)(dB * 255)); // THIS IS WHERE THE MISTAKE WAS
-					Color closestPalCol = closestPaletteColor(palette, curCol);
-					result.SetPixel(i, j, closestPalCol);
-
-					double qR = closestPalCol.R / 255d;
-					double qG = closestPalCol.G / 255d;
-					double qB = closestPalCol.B / 255d;
-
-					double rDif = dR - qR;
-					double gDif = dG - qG;
-					double bDif = dB - qB;
-
-					if (i < source.Width - 1)
-					{
-						right[0] = rDif * ri;
-						right[1] = gDif * ri;
-						right[2] = bDif * ri;
-
-						newErrRow[i + 1, 0] += rDif * rd;
-						newErrRow[i + 1, 1] += gDif * rd;
-						newErrRow[i + 1, 2] += bDif * rd;
-					}
-					if (i > 0)
-					{
-						newErrRow[i - 1, 0] += rDif * ld;
-						newErrRow[i - 1, 1] += gDif * ld;
-						newErrRow[i - 1, 2] += bDif * ld;
-					}
-
-					newErrRow[i, 0] += rDif * d;
-					newErrRow[i, 1] += gDif * d;
-					newErrRow[i, 2] += bDif * d;
-				}
-				errRow = newErrRow;
-			}
-			result.Save(@"C:\Users\Ondřej Baier\source\repos\dithertest.png", ImageFormat.Png);
-		}
 
 		public static Color closestPaletteColor(List<Color> palette, Color c)
 		{
@@ -134,6 +72,122 @@ namespace ChartCreator
 				{
 					dif = cdif;
 					result = pc;
+				}
+			}
+			return result;
+		}
+		public static int[][] correctedArray(int distThreshold, int countThreshold, int[][] arr)
+		{
+			int[][] newArray = arrCopy(arr);
+			for (int j = 0; j < arr.Length; j++)
+			{
+				for (int i = 0; i < arr[0].Length; i++)
+				{
+					int[] dcfac = dupeCountForAutoCorrect(i, j, distThreshold, countThreshold, arr);
+					int dupeCount = dcfac[0];
+					int replacementIndex = dcfac[1];
+					if (dupeCount <= countThreshold)
+					{
+						newArray[j][i] = replacementIndex;
+					}
+				}
+			}
+			return newArray;
+		}
+		private static int[] dupeCountForAutoCorrect(int x, int y, int distThreshold, int countThreshold, int[][] arr)
+		{
+			int testedIndex = arr[y][x];
+			int[] result = new int[2];
+			Dictionary<int, int> colorCounts = new Dictionary<int, int>();
+
+			for (int j = y - distThreshold; j <= y + distThreshold; j++)
+			{
+				for (int i = x - distThreshold; i <= x + distThreshold; i++)
+				{
+					if (!(i == x && j == y))
+					{
+						try
+						{
+							int currentIndex = arr[j][i];
+							if (currentIndex == testedIndex) result[0]++;
+							if (result[0] > countThreshold) return result;
+							if (colorCounts.TryGetValue(currentIndex, out int value))
+							{
+								value++;
+								colorCounts[currentIndex] = value;
+							}
+							else
+							{
+								colorCounts.Add(currentIndex, 1);
+							}
+						}
+						catch (IndexOutOfRangeException)
+						{
+							//do nothing and continue
+						}
+
+					}
+				}
+			}
+			//returns the index with highest count. I don't understand this at all, ripped from Stack Overflow
+			result[1] = colorCounts.Aggregate((xx, yy) => xx.Value > yy.Value ? xx : yy).Key;
+			return result;
+		}
+
+		private static void testArr()
+        {
+			int maxIndex = 5;
+
+			int arrWidth = 5;
+			int arrHeight = 5;
+
+			int distThreshold = 1;
+			int countThreshold = 0;
+
+			int[][] originalArray = new int[arrHeight][];
+			Random rnd = new Random();
+			for(int j = 0; j < arrHeight; j++)
+            {
+				int[] r = new int[arrWidth];
+				for(int i = 0; i < arrWidth; i++)
+                {
+					int rndn = rnd.Next(maxIndex + 1); ;
+					r[i] = rndn;
+                }
+				originalArray[j] = r;
+			}
+			DateTime nao = DateTime.Now;
+			int[][] newArr = correctedArray(distThreshold, countThreshold, originalArray);
+			Console.WriteLine((DateTime.Now - nao).TotalSeconds.ToString() + "seconds");
+
+			string origArrString = arrToString(originalArray);
+			string newArrString = arrToString(newArr);
+			Console.Write(origArrString + System.Environment.NewLine + newArrString);
+		}
+		public static string arrToString(int[][] arr)
+		{
+			string result = "";
+			for (int j = 0; j < arr.Length; j++)
+			{
+				result += "[";
+				for (int i = 0; i < arr[0].Length; i++)
+				{
+					int val = arr[j][i];
+					result += val + (i == arr[0].Length - 1 ? "]" + System.Environment.NewLine : ", ");
+				}
+			}
+			return result;
+		}
+
+		public static int[][] arrCopy(int[][] arr)
+		{
+			int[][] result = new int[arr.Length][];
+			for (int j = 0; j < arr.Length; j++)
+			{
+				result[j] = new int[arr[0].Length];
+				for (int i = 0; i < arr[0].Length; i++)
+				{
+					result[j][i] = arr[j][i];
 				}
 			}
 			return result;
