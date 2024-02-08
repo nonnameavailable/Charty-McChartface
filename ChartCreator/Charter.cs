@@ -301,7 +301,7 @@ namespace ChartCreator
 
 		public void autoCorrect(int distThreshold, int countThreshold)
         {
-			chartArray = IP.correctedArray(distThreshold, countThreshold, chartArray);
+			chartArray = ArrayCorrector.correctedArray(distThreshold, countThreshold, chartArray);
         }
         #region properties
         public Bitmap OriginalImage { get => originalImage; set => originalImage = value; }

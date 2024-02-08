@@ -44,7 +44,6 @@ namespace ChartCreator
             numbersCB.Click += NumbersCB_Click;
 
             stitchChooserComboBox.SelectedItem = "Stockinette";
-            IP.testArr();
         }
 
         private void Sfd_FileOk(object sender, CancelEventArgs e)
