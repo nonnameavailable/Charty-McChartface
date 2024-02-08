@@ -94,6 +94,7 @@ namespace ChartCreator
 			}
 			return newArray;
 		}
+
 		private static int[] dupeCountForAutoCorrect(int x, int y, int distThreshold, int countThreshold, int[][] arr)
 		{
 			int testedIndex = arr[y][x];
@@ -104,26 +105,20 @@ namespace ChartCreator
 			{
 				for (int i = x - distThreshold; i <= x + distThreshold; i++)
 				{
-					if (!(i == x && j == y))
+					//optimized drastically thanks to J_H at Code Review Stack Exchange
+					if (!(i == x && j == y) && i > 0 && j > 0 && i < arr[0].Length && j < arr.Length)
 					{
-						try
+						int currentIndex = arr[j][i];
+						if (currentIndex == testedIndex) result[0]++;
+						if (result[0] > countThreshold) return result;
+						if (colorCounts.TryGetValue(currentIndex, out int value))
 						{
-							int currentIndex = arr[j][i];
-							if (currentIndex == testedIndex) result[0]++;
-							if (result[0] > countThreshold) return result;
-							if (colorCounts.TryGetValue(currentIndex, out int value))
-							{
-								value++;
-								colorCounts[currentIndex] = value;
-							}
-							else
-							{
-								colorCounts.Add(currentIndex, 1);
-							}
+							value++;
+							colorCounts[currentIndex] = value;
 						}
-						catch (IndexOutOfRangeException)
+						else
 						{
-							//do nothing and continue
+							colorCounts.Add(currentIndex, 1);
 						}
 
 					}
@@ -134,12 +129,12 @@ namespace ChartCreator
 			return result;
 		}
 
-		private static void testArr()
+		public static void testArr()
         {
 			int maxIndex = 5;
 
-			int arrWidth = 5;
-			int arrHeight = 5;
+			int arrWidth = 2000;
+			int arrHeight = 3000;
 
 			int distThreshold = 1;
 			int countThreshold = 0;
@@ -160,9 +155,9 @@ namespace ChartCreator
 			int[][] newArr = correctedArray(distThreshold, countThreshold, originalArray);
 			Console.WriteLine((DateTime.Now - nao).TotalSeconds.ToString() + "seconds");
 
-			string origArrString = arrToString(originalArray);
-			string newArrString = arrToString(newArr);
-			Console.Write(origArrString + System.Environment.NewLine + newArrString);
+			//string origArrString = arrToString(originalArray);
+			//string newArrString = arrToString(newArr);
+			//Console.Write(origArrString + System.Environment.NewLine + newArrString);
 		}
 		public static string arrToString(int[][] arr)
 		{
