@@ -48,6 +48,11 @@ namespace ChartCreator
             this.removeColorButton = new System.Windows.Forms.Button();
             this.addColorButton = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.MatchModeRedrawButton = new System.Windows.Forms.Button();
+            this.CubicMatchModeRB = new System.Windows.Forms.RadioButton();
+            this.LinearMatchModeRB = new System.Windows.Forms.RadioButton();
+            this.LabMatchModeRB = new System.Windows.Forms.RadioButton();
             this.countThresholdNUD = new System.Windows.Forms.NumericUpDown();
             this.distThresholdNUD = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
@@ -83,6 +88,7 @@ namespace ChartCreator
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.countThresholdNUD)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.distThresholdNUD)).BeginInit();
             this.chartSettingsGB.SuspendLayout();
@@ -320,6 +326,7 @@ namespace ChartCreator
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.groupBox1);
             this.tabPage3.Controls.Add(this.countThresholdNUD);
             this.tabPage3.Controls.Add(this.distThresholdNUD);
             this.tabPage3.Controls.Add(this.label7);
@@ -330,8 +337,64 @@ namespace ChartCreator
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(136, 404);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "corr.";
+            this.tabPage3.Text = "adv.";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.MatchModeRedrawButton);
+            this.groupBox1.Controls.Add(this.CubicMatchModeRB);
+            this.groupBox1.Controls.Add(this.LinearMatchModeRB);
+            this.groupBox1.Controls.Add(this.LabMatchModeRB);
+            this.groupBox1.Location = new System.Drawing.Point(6, 104);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(124, 88);
+            this.groupBox1.TabIndex = 18;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "color match mode";
+            // 
+            // MatchModeRedrawButton
+            // 
+            this.MatchModeRedrawButton.Location = new System.Drawing.Point(66, 30);
+            this.MatchModeRedrawButton.Name = "MatchModeRedrawButton";
+            this.MatchModeRedrawButton.Size = new System.Drawing.Size(52, 40);
+            this.MatchModeRedrawButton.TabIndex = 19;
+            this.MatchModeRedrawButton.Text = "redraw";
+            this.MatchModeRedrawButton.UseVisualStyleBackColor = true;
+            this.MatchModeRedrawButton.Click += new System.EventHandler(this.createChartButton_Click);
+            // 
+            // CubicMatchModeRB
+            // 
+            this.CubicMatchModeRB.AutoSize = true;
+            this.CubicMatchModeRB.Location = new System.Drawing.Point(6, 65);
+            this.CubicMatchModeRB.Name = "CubicMatchModeRB";
+            this.CubicMatchModeRB.Size = new System.Drawing.Size(52, 17);
+            this.CubicMatchModeRB.TabIndex = 2;
+            this.CubicMatchModeRB.TabStop = true;
+            this.CubicMatchModeRB.Text = "Cubic";
+            this.CubicMatchModeRB.UseVisualStyleBackColor = true;
+            // 
+            // LinearMatchModeRB
+            // 
+            this.LinearMatchModeRB.AutoSize = true;
+            this.LinearMatchModeRB.Checked = true;
+            this.LinearMatchModeRB.Location = new System.Drawing.Point(6, 42);
+            this.LinearMatchModeRB.Name = "LinearMatchModeRB";
+            this.LinearMatchModeRB.Size = new System.Drawing.Size(54, 17);
+            this.LinearMatchModeRB.TabIndex = 1;
+            this.LinearMatchModeRB.TabStop = true;
+            this.LinearMatchModeRB.Text = "Linear";
+            this.LinearMatchModeRB.UseVisualStyleBackColor = true;
+            // 
+            // LabMatchModeRB
+            // 
+            this.LabMatchModeRB.AutoSize = true;
+            this.LabMatchModeRB.Location = new System.Drawing.Point(6, 19);
+            this.LabMatchModeRB.Name = "LabMatchModeRB";
+            this.LabMatchModeRB.Size = new System.Drawing.Size(43, 17);
+            this.LabMatchModeRB.TabIndex = 0;
+            this.LabMatchModeRB.Text = "Lab";
+            this.LabMatchModeRB.UseVisualStyleBackColor = true;
             // 
             // countThresholdNUD
             // 
@@ -688,6 +751,8 @@ namespace ChartCreator
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.countThresholdNUD)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.distThresholdNUD)).EndInit();
             this.chartSettingsGB.ResumeLayout(false);
@@ -758,6 +823,11 @@ namespace ChartCreator
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown countThresholdNUD;
         private System.Windows.Forms.NumericUpDown distThresholdNUD;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton CubicMatchModeRB;
+        private System.Windows.Forms.RadioButton LinearMatchModeRB;
+        private System.Windows.Forms.RadioButton LabMatchModeRB;
+        private System.Windows.Forms.Button MatchModeRedrawButton;
     }
 }
 

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace ChartCreator
 {
-    class IP
+    static class IP
     {
 
 		public static double clamp(double value, double min, double max)
@@ -60,22 +60,6 @@ namespace ChartCreator
             }
             return result;
         }
-
-		public static Color closestPaletteColor(List<Color> palette, Color c)
-		{
-			Color result = palette[0];
-			int dif = 765;
-			foreach (Color pc in palette)
-			{
-				int cdif = Math.Abs(pc.R - c.R) + Math.Abs(pc.G - c.G) + Math.Abs(pc.B - c.B);
-				if (cdif < dif)
-				{
-					dif = cdif;
-					result = pc;
-				}
-			}
-			return result;
-		}
 		
 		public static string arrToString(int[][] arr)
 		{
@@ -101,6 +85,21 @@ namespace ChartCreator
 				for (int i = 0; i < arr[0].Length; i++)
 				{
 					result[j][i] = arr[j][i];
+				}
+			}
+			return result;
+		}
+		public static Color closestPaletteColorLinear(List<Color> palette, Color c)
+		{
+			Color result = palette[0];
+			int dif = 765;
+			foreach (Color pc in palette)
+			{
+				int cdif = Math.Abs(pc.R - c.R) + Math.Abs(pc.G - c.G) + Math.Abs(pc.B - c.B);
+				if (cdif < dif)
+				{
+					dif = cdif;
+					result = pc;
 				}
 			}
 			return result;

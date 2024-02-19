@@ -114,11 +114,11 @@ namespace ChartCreator
             {
                 if (DitherChart)
                 {
-                    charter.createChartArrayDitheredSerpent(HGauge, VGauge, VCount);
+                    charter.createChartArrayDitheredSerpent(HGauge, VGauge, VCount, MatchMode);
                 }
                 else
                 {
-                    charter.createChartArray(HGauge, VGauge, VCount);
+                    charter.createChartArray(HGauge, VGauge, VCount, MatchMode);
                 }
             }
             if(!charter.generateChartFromArray(StitchWidth, StitchHeight, LineThickness, DrawNumbers))
@@ -398,6 +398,24 @@ namespace ChartCreator
                 result[1] = h;
                 return result;
             }        
+        }
+        public int MatchMode
+        {
+            get
+            {
+                if (LabMatchModeRB.Checked)
+                {
+                    return Charter.colorMatchLab;
+                }
+                else if (LinearMatchModeRB.Checked)
+                {
+                    return Charter.colorMatchLinear;
+                }
+                else
+                {
+                    return Charter.colorMatchCubic;
+                }
+            }
         }
         #endregion
 

@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace ChartCreator
 {
-    class CC
+    static class CC
     {
         private const double lumX = 95.047;
         private const double lumY = 100;

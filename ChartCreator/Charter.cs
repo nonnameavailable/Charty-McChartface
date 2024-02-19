@@ -14,6 +14,9 @@ namespace ChartCreator
 {
 	public class Charter
 	{
+		public const int colorMatchLab = 0;
+		public const int colorMatchLinear = 1;
+		public const int colorMatchCubic = 2;
 		private Bitmap originalImage;
 		private List<Color> yarnColors;
 		private List<Color> replacementYarnColors;
@@ -149,7 +152,7 @@ namespace ChartCreator
 			scg.Dispose();
 		}
 
-		public void createChartArray(double hGauge, double vGauge, int vCount)
+		public void createChartArray(double hGauge, double vGauge, int vCount, int matchMode)
 		{
 			double whRatio = vGauge / hGauge;
 			int hCount = (int)((double)originalImage.Width / (double)originalImage.Height * vCount / whRatio);
@@ -162,14 +165,14 @@ namespace ChartCreator
 					int x = (int)((double)(i + 0.5) / hCount * originalImage.Width);
 					int y = (int)((double)(j + 0.5) / vCount * originalImage.Height);
 					Color curCol = originalImage.GetPixel(x, y);
-					int cci = closestYarnColorIndexLab(curCol);
+					int cci = closestYarnColorIndex(curCol, matchMode);
 					r[i] =  cci;
 				}
 				chartArray[j] = r;
 			}
 		}
 
-		public void createChartArrayDitheredSerpent(double hGauge, double vGauge, int vCount)
+		public void createChartArrayDitheredSerpent(double hGauge, double vGauge, int vCount, int matchMode)
 		{
 			double ri = 7 / 16d;
 			double rd = 1 / 16d;
@@ -194,7 +197,7 @@ namespace ChartCreator
 					double dG = IP.clamp(c.G / 255d + right[1] + errRow[i, 1], 0, 1);
 					double dB = IP.clamp(c.B / 255d + right[2] + errRow[i, 2], 0, 1);
 					Color curCol = Color.FromArgb((int)(dR * 255), (int)(dG * 255), (int)(dB * 255));
-					int cci = closestYarnColorIndexLab(curCol);
+					int cci = closestYarnColorIndex(curCol, matchMode);
 					r[i] = cci;
 					Color quCol = yarnColors[cci];
 
@@ -232,6 +235,19 @@ namespace ChartCreator
 			}
 		}
 
+		private int closestYarnColorIndex(Color tc, int matchMode)
+        {
+            switch(matchMode)
+			{
+				case colorMatchLinear:
+					return closestYarnColorIndexLinear(tc);
+				case colorMatchCubic:
+					return closestYarnColorIndexCubic(tc);
+				default:
+					return closestYarnColorIndexLab(tc);
+			}
+        }
+
 		private int closestYarnColorIndexLab(Color tc)
 		{
 			int result = 0;
@@ -240,6 +256,42 @@ namespace ChartCreator
 			{
 				Color yc = yarnColors[i];
 				double cDist = CC.deltaE(yc, tc);
+				if (cDist < lDist)
+				{
+					lDist = cDist;
+					result = i;
+				}
+			}
+			return result;
+		}
+
+		private int closestYarnColorIndexLinear(Color tc)
+		{
+			int result = 0;
+			int dif = 765;
+			for (int i = 0; i < yarnColors.Count; i++)
+			{
+				Color yc = yarnColors[i];
+				int cdif = Math.Abs(yc.R - tc.R) + Math.Abs(yc.G - tc.G) + Math.Abs(yc.B - tc.B);
+				if (cdif < dif)
+				{
+					dif = cdif;
+					result = i;
+				}
+			}
+			return result;
+		}
+		private int closestYarnColorIndexCubic(Color tc)
+		{
+			int result = 0;
+			double lDist = 10000;
+			for (int i = 0; i < yarnColors.Count; i++)
+			{
+				Color yc = yarnColors[i];
+				double rDif = Math.Abs(yc.R - tc.R);
+				double gDif = Math.Abs(yc.G - tc.G);
+				double bDif = Math.Abs(yc.B - tc.B);
+				double cDist = Math.Sqrt(Math.Pow(Math.Sqrt(rDif * rDif + gDif * gDif), 2) + bDif * bDif);
 				if (cDist < lDist)
 				{
 					lDist = cDist;
@@ -332,42 +384,6 @@ namespace ChartCreator
 			g.DrawImage(stitchCopy, 0, 0, result.Width, result.Height);
 			g.Dispose();
 			stitchCopy.Dispose();
-			return result;
-		}
-
-		private int closestYarnColorIndex(Color tc)
-		{
-			int result = 0;
-			int dif = 765;
-			for (int i = 0; i < yarnColors.Count; i++)
-			{
-				Color yc = yarnColors[i];
-				int cdif = Math.Abs(yc.R - tc.R) + Math.Abs(yc.G - tc.G) + Math.Abs(yc.B - tc.B);
-				if (cdif < dif)
-				{
-					dif = cdif;
-					result = i;
-				}
-			}
-			return result;
-		}
-		private int closestYarnColorIndexBetter(Color tc)
-		{
-			int result = 0;
-			double lDist = 10000;
-			for (int i = 0; i < yarnColors.Count; i++)
-			{
-				Color yc = yarnColors[i];
-				double rDif = Math.Abs(yc.R - tc.R);
-				double gDif = Math.Abs(yc.G - tc.G);
-				double bDif = Math.Abs(yc.B - tc.B);
-				double cDist = Math.Sqrt(Math.Pow(Math.Sqrt(rDif * rDif + gDif * gDif), 2) + bDif * bDif);
-				if (cDist < lDist)
-				{
-					lDist = cDist;
-					result = i;
-				}
-			}
 			return result;
 		}
 		#endregion
