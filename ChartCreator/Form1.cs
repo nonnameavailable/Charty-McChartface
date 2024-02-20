@@ -36,6 +36,8 @@ namespace ChartCreator
             charter.ReplacementYarnColors = replacementColors();
 
             this.ResizeEnd += Form1_ResizeEnd;
+            this.DragEnter += Form1_DragEnter;
+            this.DragDrop += Form1_DragDrop;
             sfd.FileOk += Sfd_FileOk;
             mainPictureBox.MouseClick += mainPictureBox_MouseClick;
             mainPictureBox.ContextMenuStrip = pictureCMS;
@@ -364,6 +366,28 @@ namespace ChartCreator
         {
             createStitchChartButton.Enabled = false;
             saveStitchedChartButton.Enabled = false;
+        }
+
+        void Form1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            try
+            {
+                charter.OriginalImage = new Bitmap(files[0]);
+            }
+            catch (System.ArgumentException)
+            {
+                MessageBox.Show("This is not an image file");
+                return;
+            }
+            removeAllColors();
+            mainImage = charter.OriginalImage;
+            updatePictureBox();
         }
         #endregion
 

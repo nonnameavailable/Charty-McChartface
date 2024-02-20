@@ -697,6 +697,7 @@ namespace ChartCreator
             // ofd
             // 
             this.ofd.FileName = "openFileDialog1";
+            this.ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.tif;*.tiff;*.bmp;*.gif";
             // 
             // sfd
             // 
@@ -737,6 +738,7 @@ namespace ChartCreator
             // 
             // Form1
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(567, 461);
