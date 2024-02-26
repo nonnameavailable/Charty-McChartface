@@ -18,12 +18,14 @@ namespace ChartCreator
         private Charter charter;
         private Bitmap mainImage;
         private bool renderModeScroll;
+        private double dispImgRatio;
 
         public Form1()
         {
             InitializeComponent();
             this.Width = 1000;
             this.Height = 800;
+            this.dispImgRatio = 1;
             charter = new Charter();
             charter.OriginalImage = new Bitmap(Properties.Resources.masterpiece);
             mainImage = charter.OriginalImage;
@@ -64,6 +66,13 @@ namespace ChartCreator
             if (renderModeScroll)
             {
                 mainPictureBox.Image = mainImage;
+                int[] dims = { (int)(mainImage.Width * dispImgRatio), (int)(mainImage.Height * dispImgRatio) };
+                Bitmap mimg = new Bitmap(dims[0], dims[1]);
+                Graphics g = Graphics.FromImage(mimg);
+                g.Clear(Color.Black);
+                g.DrawImage(mainImage, 0, 0, dims[0], dims[1]);
+                mainPictureBox.Image = mimg;
+                g.Dispose();
             }
             else
             {
@@ -75,6 +84,22 @@ namespace ChartCreator
                 mainPictureBox.Image = mimg;
                 g.Dispose();
             }
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Oemplus || keyData == Keys.Add)
+            {
+                dispImgRatio *= 1.05;
+                updatePictureBox();
+                return true;
+            } else if(keyData == Keys.OemMinus || keyData == Keys.Subtract)
+            {
+                dispImgRatio /= 1.05;
+                updatePictureBox();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private List<Color> yarnColors()
