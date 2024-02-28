@@ -475,7 +475,15 @@ namespace ChartCreator
 
         private void autoCorrectButton_Click(object sender, EventArgs e)
         {
-            charter.autoCorrect(DistanceThreshold, CountThreshold);
+            try
+            {
+                charter.autoCorrect(DistanceThreshold, CountThreshold);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Create the chart first");
+                return;
+            }
             createChart(false);
         }
     }

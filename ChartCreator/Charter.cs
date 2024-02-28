@@ -354,7 +354,7 @@ namespace ChartCreator
 		public void autoCorrect(int distThreshold, int countThreshold)
         {
 			chartArray = ArrayCorrector.correctedArray(distThreshold, countThreshold, chartArray);
-        }
+		}
         #region properties
         public Bitmap OriginalImage { get => originalImage; set => originalImage = value; }
         public Bitmap Chart { get => chart; }
