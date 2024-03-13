@@ -30,6 +30,7 @@ namespace ChartCreator
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -352,6 +353,7 @@ namespace ChartCreator
             this.groupBox1.TabIndex = 18;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "color match mode";
+            this.gaugeTT.SetToolTip(this.groupBox1, resources.GetString("groupBox1.ToolTip"));
             // 
             // MatchModeRedrawButton
             // 

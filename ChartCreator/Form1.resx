@@ -120,6 +120,14 @@
   <metadata name="gaugeTT.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="groupBox1.ToolTip" xml:space="preserve">
+    <value>Here you can switch the way colors in the image are matched to the colors in your palette.
+
+Depending on what you want the chart to look like,
+some of these might give better results than others.
+
+Linear and Cubic should be almost identical, Lab will be slightly different.</value>
+  </data>
   <metadata name="mainStatusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>370, 17</value>
   </metadata>
