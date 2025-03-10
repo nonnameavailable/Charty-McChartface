@@ -34,9 +34,8 @@ namespace ChartCreator
             mainPictureBox.Dock = DockStyle.Fill;
             updatePictureBox();
 
-            charter.YarnColors = yarnColors();
-            charter.ReplacementYarnColors = replacementColors();
-
+            UpdateColors();
+    
             this.ResizeEnd += Form1_ResizeEnd;
             this.DragEnter += Form1_DragEnter;
             this.DragDrop += Form1_DragDrop;
@@ -48,6 +47,35 @@ namespace ChartCreator
             numbersCB.Click += NumbersCB_Click;
 
             stitchChooserComboBox.SelectedItem = "Stockinette";
+
+            ycsHolder1.AddColorBtnClicked += (sender, args) => UpdateColors();
+            ycsHolder1.RemoveColorBtnClicked += (sender, args) => UpdateColors();
+            loadMapBTN.Click += LoadMapBTN_Click;
+            showMapBTN.Click += ShowMapBTN_Click;
+        }
+
+        private void ShowMapBTN_Click(object sender, EventArgs e)
+        {
+            mainImage = charter.Map;
+            updatePictureBox();
+        }
+
+        private void LoadMapBTN_Click(object sender, EventArgs e)
+        {
+            if (ofd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            try
+            {
+                charter.Map = new Bitmap(ofd.FileName);
+                showMapBTN.Enabled = true;
+            }
+            catch (System.ArgumentException)
+            {
+                MessageBox.Show("You did not select an image file");
+                return;
+            }
         }
 
         private void Sfd_FileOk(object sender, CancelEventArgs e)
@@ -102,53 +130,38 @@ namespace ChartCreator
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private List<Color> yarnColors()
-        {
-            List<Color> result = new List<Color>();
-
-            foreach (yarnColorSelector ycs in colorsFLP.Controls)
-            {
-                result.Add(ycs.Color);
-            }
-
-            return result;
-        }
-
-        private List<Color> replacementColors()
-        {
-            List<Color> result = new List<Color>();
-
-            foreach (yarnColorSelector ycs in colorsFLP.Controls)
-            {
-                result.Add(ycs.ReplacementColor);
-            }
-
-            return result;
-        }
-
         public bool createChart(bool newArray)
         {
-            if (colorsFLP.Controls.Count == 0)
+            if (ycsHolder1.ColorCount == 0)
             {
                 MessageBox.Show("Switch to the colors tab and add some colors first.");
                 return false;
             }
 
-            charter.YarnColors = yarnColors();
-            charter.ReplacementYarnColors = replacementColors();
+            charter.YarnColors = ycsHolder1.YarnColors();
+            charter.ReplacementYarnColors = ycsHolder1.ReplacementColors();
             charter.NegativeGrid = negativeGridCB.Checked;
             if (newArray)
             {
                 if (DitherChart)
                 {
-                    charter.createChartArrayDitheredSerpent(HGauge, VGauge, VCount, MatchMode);
+                    //charter.createChartArrayDitheredSerpent(HGauge, VGauge, VCount, MatchMode);
+                    charter.CreateDitheredChartWithMap(HGauge, VGauge, VCount, MatchMode, ycsHolder1);
                 }
                 else
                 {
                     charter.createChartArray(HGauge, VGauge, VCount, MatchMode);
                 }
             }
-            if(!charter.generateChartFromArray(StitchWidth, StitchHeight, LineThickness, DrawNumbers))
+            List<Color> colorList = new List<Color>();
+            foreach(YarnColorSelector ycs in ycsHolder1.YCSList)
+            {
+                foreach(Color c in ycs.MappedColors)
+                {
+                    colorList.Add(c);
+                }
+            }
+            if(!charter.generateChartFromArray(StitchWidth, StitchHeight, LineThickness, DrawNumbers, colorList, charter.MapChartArray))
             {
                 return false;
             }
@@ -160,31 +173,12 @@ namespace ChartCreator
             return true;
         }
 
-        private void removeAllColors()
-        {
-            for (int i = colorsFLP.Controls.Count - 1; i >= 0; i--)
-            {
-                colorsFLP.Controls.Remove(colorsFLP.Controls[i]);
-            }
-        }
-
         #region button event handlers
-        private void addColorButton_Click(object sender, EventArgs e)
-        {
-            colorsFLP.Controls.Add(new yarnColorSelector(Color.White));
-            charter.YarnColors = yarnColors();
-            charter.ReplacementYarnColors = replacementColors();
-            createStitchChartButton.Enabled = false;
-        }
 
-        private void removeColorButton_Click(object sender, EventArgs e)
+        private void UpdateColors()
         {
-            if (colorsFLP.Controls.Count > 0)
-            {
-                colorsFLP.Controls.Remove(colorsFLP.Controls[colorsFLP.Controls.Count - 1]);
-            }
-            charter.YarnColors = yarnColors();
-            charter.ReplacementYarnColors = replacementColors();
+            charter.YarnColors = ycsHolder1.YarnColors();
+            charter.ReplacementYarnColors = ycsHolder1.ReplacementColors();
             createStitchChartButton.Enabled = false;
         }
 
@@ -214,7 +208,7 @@ namespace ChartCreator
                 MessageBox.Show("You did not select an image file");
                 return;
             }
-            removeAllColors();
+            ycsHolder1.RemoveAllColors();
             mainImage = charter.OriginalImage;
             updatePictureBox();
         }
@@ -250,13 +244,13 @@ namespace ChartCreator
         }
         private void createStitchChartButton_Click(object sender, EventArgs e)
         {
-            if (colorsFLP.Controls.Count == 0)
+            if (ycsHolder1.ColorCount == 0)
             {
                 MessageBox.Show("Switch to the colors tab and add some colors first.");
                 return;
             }
-            charter.YarnColors = yarnColors();
-            charter.ReplacementYarnColors = replacementColors();
+            charter.YarnColors = ycsHolder1.YarnColors();
+            charter.ReplacementYarnColors = ycsHolder1.ReplacementColors();
             switch (SelectedStitch)
             {
                 case "Stockinette":
@@ -287,17 +281,17 @@ namespace ChartCreator
         #region other event handlers
         private void mainPictureBox_MouseClick(object sender, EventArgs e)
         {
-            if (clickColorCB.Checked)
+            if (ycsHolder1.ClickColor)
             {
                 try
                 {
                     Color c = ((Bitmap)(mainPictureBox.Image)).GetPixel(((MouseEventArgs)e).X, ((MouseEventArgs)e).Y);
-                    colorsFLP.Controls.Add(new yarnColorSelector(c));
+                    ycsHolder1.AddColor(c);
                 }
                 catch (ArgumentOutOfRangeException) { }
             } else
             {
-                if (colorsFLP.Controls.Count == 0)
+                if (ycsHolder1.ColorCount == 0)
                 {
                     MessageBox.Show("Switch to the colors tab and add some colors first.");
                     return;
@@ -317,7 +311,7 @@ namespace ChartCreator
                     return;
                 }
 
-                foreach (yarnColorSelector ycs in colorsFLP.Controls)
+                foreach (YarnColorSelector ycs in ycsHolder1.YCSList)
                 {
                     if (ycs.IsPainting)
                     {
@@ -325,11 +319,11 @@ namespace ChartCreator
                         break;
                     }
                 }
-                charter.YarnColors = yarnColors();
-                charter.ReplacementYarnColors = replacementColors();
+                charter.YarnColors = ycsHolder1.YarnColors();
+                charter.ReplacementYarnColors = ycsHolder1.ReplacementColors();
                 int paintColorIndex = charter.YarnColors.IndexOf(paintC);
                 charter.setGrid(chartX, chartY, paintColorIndex);
-                charter.generateChartFromArray(StitchWidth, StitchHeight, LineThickness, DrawNumbers);
+                charter.generateChartFromArray(StitchWidth, StitchHeight, LineThickness, DrawNumbers, ycsHolder1.YarnColors(), charter.ChartArray);
                 mainImage = charter.Chart;
                 updatePictureBox();
             }
@@ -410,7 +404,7 @@ namespace ChartCreator
                 MessageBox.Show("This is not an image file");
                 return;
             }
-            removeAllColors();
+            ycsHolder1.RemoveAllColors();
             mainImage = charter.OriginalImage;
             updatePictureBox();
         }
@@ -426,7 +420,7 @@ namespace ChartCreator
         public int CountThreshold { get => (int)countThresholdNUD.Value; set => countThresholdNUD.Value = value; }
         public bool NegativeGrid { get => negativeGridCB.Checked; set => negativeGridCB.Checked = value; }
         public bool DitherChart { get => ditherCB.Checked; set => ditherCB.Checked = value; }
-        public bool ClickColor { get => clickColorCB.Checked; set => clickColorCB.Checked = value; }
+        public bool ClickColor { get => ycsHolder1.ClickColor; set => ycsHolder1.ClickColor = value; }
         public bool DrawNumbers { get => numbersCB.Checked; set => numbersCB.Checked = value; }
         public string SelectedStitch { get => stitchChooserComboBox.SelectedItem.ToString(); }
         public double StitchHeight { get => StitchWidth * HGauge / VGauge; }

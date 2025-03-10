@@ -58,7 +58,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -86,11 +86,17 @@
     <Compile Include="IP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="yarnColorSelector.cs">
+    <Compile Include="YarnColorSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="yarnColorSelector.Designer.cs">
-      <DependentUpon>yarnColorSelector.cs</DependentUpon>
+    <Compile Include="YarnColorSelector.Designer.cs">
+      <DependentUpon>YarnColorSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="YCSHolder.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="YCSHolder.Designer.cs">
+      <DependentUpon>YCSHolder.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -105,10 +111,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="yarnColorSelector.resx">
-      <DependentUpon>yarnColorSelector.cs</DependentUpon>
+    <EmbeddedResource Include="YarnColorSelector.resx">
+      <DependentUpon>YarnColorSelector.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ChartCreator_TemporaryKey.pfx" />
+    <EmbeddedResource Include="YCSHolder.resx">
+      <DependentUpon>YCSHolder.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

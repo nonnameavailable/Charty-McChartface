@@ -1,7 +1,7 @@
 ﻿
 namespace ChartCreator
 {
-    partial class yarnColorSelector
+    partial class YarnColorSelector
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,13 +30,14 @@ namespace ChartCreator
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(yarnColorSelector));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(YarnColorSelector));
             this.selectColorButton = new System.Windows.Forms.Button();
             this.yarnColorTB = new System.Windows.Forms.TextBox();
             this.yarnColorDialog = new System.Windows.Forms.ColorDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.replacementColorButton = new System.Windows.Forms.Button();
             this.paintCB = new System.Windows.Forms.CheckBox();
+            this.openMappedColorsBTN = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // selectColorButton
@@ -86,10 +87,20 @@ namespace ChartCreator
         "be unchecked for this to work!");
             this.paintCB.UseVisualStyleBackColor = true;
             // 
+            // openMappedColorsBTN
+            // 
+            this.openMappedColorsBTN.Location = new System.Drawing.Point(88, 27);
+            this.openMappedColorsBTN.Name = "openMappedColorsBTN";
+            this.openMappedColorsBTN.Size = new System.Drawing.Size(23, 21);
+            this.openMappedColorsBTN.TabIndex = 4;
+            this.openMappedColorsBTN.Text = "m";
+            this.openMappedColorsBTN.UseVisualStyleBackColor = true;
+            // 
             // yarnColorSelector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.openMappedColorsBTN);
             this.Controls.Add(this.paintCB);
             this.Controls.Add(this.replacementColorButton);
             this.Controls.Add(this.yarnColorTB);
@@ -109,5 +120,6 @@ namespace ChartCreator
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button replacementColorButton;
         private System.Windows.Forms.CheckBox paintCB;
+        private System.Windows.Forms.Button openMappedColorsBTN;
     }
 }

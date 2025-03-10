@@ -10,22 +10,30 @@ using System.Windows.Forms;
 
 namespace ChartCreator
 {
-    public partial class yarnColorSelector : UserControl
+    public partial class YarnColorSelector : UserControl
     {
-        public yarnColorSelector(Color c)
+        public string YarnLabel { get => yarnColorTB.Text; set => yarnColorTB.Text = value; }
+        public Color Color { get => selectColorButton.BackColor; set => selectColorButton.BackColor = value; }
+        public Color ReplacementColor { get => replacementColorButton.BackColor; set => replacementColorButton.BackColor = value; }
+        public bool IsPainting { get => paintCB.Checked; set => paintCB.Checked = value; }
+        public List<Color> MappedColors { get; set; }
+        public event EventHandler MapBtnClicked;
+        public YarnColorSelector(Color c)
         {
             InitializeComponent();
             selectColorButton.BackColor = c;
             replacementColorButton.BackColor = c;
             yarnColorDialog.Color = c;
             paintCB.Click += PaintCB_Click;
+            MappedColors = new List<Color>();
+            openMappedColorsBTN.Click += (sender, args) => MapBtnClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void PaintCB_Click(object sender, EventArgs e)
         {
             if (IsPainting)
             {
-                foreach(yarnColorSelector yc in this.Parent.Controls)
+                foreach(YarnColorSelector yc in this.Parent.Controls)
                 {
                     if (!this.Equals(yc))
                     {
@@ -45,11 +53,6 @@ namespace ChartCreator
             selectColorButton.BackColor = yarnColorDialog.Color;
             replacementColorButton.BackColor = yarnColorDialog.Color;
         }
-        public string YarnLabel { get => yarnColorTB.Text; set => yarnColorTB.Text = value; }
-
-        public Color Color { get => selectColorButton.BackColor; set => selectColorButton.BackColor = value; }
-        public Color ReplacementColor { get => replacementColorButton.BackColor; set => replacementColorButton.BackColor = value; }
-        public bool IsPainting { get => paintCB.Checked; set => paintCB.Checked = value; }
 
         private void replacementColorButton_Click(object sender, EventArgs e)
         {

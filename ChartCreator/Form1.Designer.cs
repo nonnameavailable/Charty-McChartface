@@ -44,10 +44,6 @@ namespace ChartCreator
             this.createChartButton = new System.Windows.Forms.Button();
             this.LoadImageButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.clickColorCB = new System.Windows.Forms.CheckBox();
-            this.colorsFLP = new System.Windows.Forms.FlowLayoutPanel();
-            this.removeColorButton = new System.Windows.Forms.Button();
-            this.addColorButton = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.MatchModeRedrawButton = new System.Windows.Forms.Button();
@@ -84,6 +80,9 @@ namespace ChartCreator
             this.renderModeMI = new System.Windows.Forms.ToolStripMenuItem();
             this.renderFitMI = new System.Windows.Forms.ToolStripMenuItem();
             this.renderScrollMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadMapBTN = new System.Windows.Forms.Button();
+            this.ycsHolder1 = new ChartCreator.YCSHolder();
+            this.showMapBTN = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -139,6 +138,8 @@ namespace ChartCreator
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
+            this.tabPage1.Controls.Add(this.showMapBTN);
+            this.tabPage1.Controls.Add(this.loadMapBTN);
             this.tabPage1.Controls.Add(this.showStitchChartButton);
             this.tabPage1.Controls.Add(this.createStitchChartButton);
             this.tabPage1.Controls.Add(this.stitchChooserComboBox);
@@ -230,7 +231,7 @@ namespace ChartCreator
             // showChartButton
             // 
             this.showChartButton.Enabled = false;
-            this.showChartButton.Location = new System.Drawing.Point(5, 242);
+            this.showChartButton.Location = new System.Drawing.Point(7, 217);
             this.showChartButton.Name = "showChartButton";
             this.showChartButton.Size = new System.Drawing.Size(124, 30);
             this.showChartButton.TabIndex = 4;
@@ -241,7 +242,7 @@ namespace ChartCreator
             // 
             // createChartButton
             // 
-            this.createChartButton.Location = new System.Drawing.Point(6, 62);
+            this.createChartButton.Location = new System.Drawing.Point(6, 89);
             this.createChartButton.Name = "createChartButton";
             this.createChartButton.Size = new System.Drawing.Size(124, 30);
             this.createChartButton.TabIndex = 1;
@@ -264,10 +265,7 @@ namespace ChartCreator
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.clickColorCB);
-            this.tabPage2.Controls.Add(this.colorsFLP);
-            this.tabPage2.Controls.Add(this.removeColorButton);
-            this.tabPage2.Controls.Add(this.addColorButton);
+            this.tabPage2.Controls.Add(this.ycsHolder1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -275,55 +273,6 @@ namespace ChartCreator
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "colors";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // clickColorCB
-            // 
-            this.clickColorCB.AutoSize = true;
-            this.clickColorCB.Checked = true;
-            this.clickColorCB.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.clickColorCB.Location = new System.Drawing.Point(10, 37);
-            this.clickColorCB.Margin = new System.Windows.Forms.Padding(2);
-            this.clickColorCB.Name = "clickColorCB";
-            this.clickColorCB.Size = new System.Drawing.Size(74, 17);
-            this.clickColorCB.TabIndex = 3;
-            this.clickColorCB.Text = "click color";
-            this.gaugeTT.SetToolTip(this.clickColorCB, "When checked, you can click anywhere on the image\r\nto add color to your pallette " +
-        "(do this for every color of yarn you intend to use)");
-            this.clickColorCB.UseVisualStyleBackColor = true;
-            // 
-            // colorsFLP
-            // 
-            this.colorsFLP.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.colorsFLP.AutoScroll = true;
-            this.colorsFLP.BackColor = System.Drawing.Color.Transparent;
-            this.colorsFLP.Location = new System.Drawing.Point(7, 59);
-            this.colorsFLP.Name = "colorsFLP";
-            this.colorsFLP.Size = new System.Drawing.Size(122, 290);
-            this.colorsFLP.TabIndex = 2;
-            // 
-            // removeColorButton
-            // 
-            this.removeColorButton.Location = new System.Drawing.Point(69, 7);
-            this.removeColorButton.Name = "removeColorButton";
-            this.removeColorButton.Size = new System.Drawing.Size(60, 23);
-            this.removeColorButton.TabIndex = 1;
-            this.removeColorButton.Text = "remove";
-            this.gaugeTT.SetToolTip(this.removeColorButton, "Removes the last color from your palette");
-            this.removeColorButton.UseVisualStyleBackColor = true;
-            this.removeColorButton.Click += new System.EventHandler(this.removeColorButton_Click);
-            // 
-            // addColorButton
-            // 
-            this.addColorButton.Location = new System.Drawing.Point(6, 7);
-            this.addColorButton.Name = "addColorButton";
-            this.addColorButton.Size = new System.Drawing.Size(57, 23);
-            this.addColorButton.TabIndex = 0;
-            this.addColorButton.Text = "add";
-            this.gaugeTT.SetToolTip(this.addColorButton, "Adds new color to your palette\r\n\r\nYou can also left click anywhere in the image\r\n" +
-        "to pick color from the image");
-            this.addColorButton.UseVisualStyleBackColor = true;
-            this.addColorButton.Click += new System.EventHandler(this.addColorButton_Click);
             // 
             // tabPage3
             // 
@@ -738,6 +687,36 @@ namespace ChartCreator
             this.renderScrollMI.Text = "scroll";
             this.renderScrollMI.Click += new System.EventHandler(this.renderScrollMI_Click);
             // 
+            // loadMapBTN
+            // 
+            this.loadMapBTN.Location = new System.Drawing.Point(6, 42);
+            this.loadMapBTN.Name = "loadMapBTN";
+            this.loadMapBTN.Size = new System.Drawing.Size(124, 30);
+            this.loadMapBTN.TabIndex = 11;
+            this.loadMapBTN.Text = "Load map";
+            this.gaugeTT.SetToolTip(this.loadMapBTN, "Load your image");
+            this.loadMapBTN.UseVisualStyleBackColor = true;
+            // 
+            // ycsHolder1
+            // 
+            this.ycsHolder1.ClickColor = true;
+            this.ycsHolder1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ycsHolder1.Location = new System.Drawing.Point(3, 3);
+            this.ycsHolder1.Name = "ycsHolder1";
+            this.ycsHolder1.Size = new System.Drawing.Size(130, 398);
+            this.ycsHolder1.TabIndex = 0;
+            // 
+            // showMapBTN
+            // 
+            this.showMapBTN.Enabled = false;
+            this.showMapBTN.Location = new System.Drawing.Point(3, 253);
+            this.showMapBTN.Name = "showMapBTN";
+            this.showMapBTN.Size = new System.Drawing.Size(124, 19);
+            this.showMapBTN.TabIndex = 12;
+            this.showMapBTN.Text = "showMap";
+            this.gaugeTT.SetToolTip(this.showMapBTN, "If you have created a chart, this button will display a preview");
+            this.showMapBTN.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -752,7 +731,6 @@ namespace ChartCreator
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -782,7 +760,6 @@ namespace ChartCreator
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Button LoadImageButton;
-        private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.GroupBox chartSettingsGB;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -790,11 +767,7 @@ namespace ChartCreator
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.OpenFileDialog ofd;
         private System.Windows.Forms.Button createChartButton;
-        private System.Windows.Forms.Button removeColorButton;
-        private System.Windows.Forms.Button addColorButton;
-        private System.Windows.Forms.FlowLayoutPanel colorsFLP;
-        private yarnColorSelector yarnColorSelector1;
-        private System.Windows.Forms.CheckBox clickColorCB;
+        private YarnColorSelector yarnColorSelector1;
         private System.Windows.Forms.Button showImageButton;
         private System.Windows.Forms.Button showChartButton;
         private System.Windows.Forms.Label label4;
@@ -832,6 +805,10 @@ namespace ChartCreator
         private System.Windows.Forms.RadioButton LinearMatchModeRB;
         private System.Windows.Forms.RadioButton LabMatchModeRB;
         private System.Windows.Forms.Button MatchModeRedrawButton;
+        private System.Windows.Forms.TabPage tabPage2;
+        private YCSHolder ycsHolder1;
+        private System.Windows.Forms.Button loadMapBTN;
+        private System.Windows.Forms.Button showMapBTN;
     }
 }
 

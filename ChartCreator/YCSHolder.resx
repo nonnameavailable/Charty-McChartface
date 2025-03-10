@@ -117,18 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>145, 19</value>
-  </metadata>
-  <metadata name="yarnColorDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="replacementColorButton.ToolTip" xml:space="preserve">
-    <value>Replacement color.
-
-If the primary color does not match the color of your yarn,
-you can change this manually to match your yarn more closely.
-
-You can also use this to replace the primary color entirely.</value>
-  </data>
 </root>
