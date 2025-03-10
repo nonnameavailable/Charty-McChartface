@@ -150,18 +150,20 @@ namespace ChartCreator
                 }
                 else
                 {
-                    charter.createChartArray(HGauge, VGauge, VCount, MatchMode);
+                    //charter.createChartArray(HGauge, VGauge, VCount, MatchMode);
+                    charter.CreateDitheredChartWithMap(HGauge, VGauge, VCount, MatchMode, ycsHolder1);
                 }
             }
             List<Color> colorList = new List<Color>();
             foreach(YarnColorSelector ycs in ycsHolder1.YCSList)
             {
-                foreach(Color c in ycs.MappedColors)
+                foreach(Color c in ycs.MappedReplacementColors)
                 {
                     colorList.Add(c);
                 }
             }
             if(!charter.generateChartFromArray(StitchWidth, StitchHeight, LineThickness, DrawNumbers, colorList, charter.MapChartArray))
+            //if (!charter.generateChartFromArray(StitchWidth, StitchHeight, LineThickness, DrawNumbers, ycsHolder1.YarnColors(), charter.ChartArray))
             {
                 return false;
             }

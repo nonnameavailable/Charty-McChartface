@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace ChartCreator
 {
@@ -30,12 +31,11 @@ namespace ChartCreator
         private void BackBTN_Click(object sender, EventArgs e)
         {
             if (!Mapping) return;
-            _mappingCS.MappedColors.Clear();
+            _mappingCS.MappedYCSels.Clear();
             for(int i = colorsFLP.Controls.Count - 1; i >= 0; i--)
             {
                 YarnColorSelector ycs = (YarnColorSelector)colorsFLP.Controls[i];
-                _mappingCS.MappedColors.Add(ycs.Color);
-                ycs.Dispose();
+                _mappingCS.MappedYCSels.Add(ycs);
             }
             colorsFLP.Controls.Clear();
             foreach(YarnColorSelector ycs in YCSList)
@@ -58,9 +58,9 @@ namespace ChartCreator
         {
             colorsFLP.Controls.Clear();
             YarnColorSelector ycs = (YarnColorSelector)sender;
-            foreach(Color c in ycs.MappedColors)
+            foreach(YarnColorSelector mycs in ycs.MappedYCSels)
             {
-                colorsFLP.Controls.Add(new YarnColorSelector(c));
+                colorsFLP.Controls.Add(mycs);
             }
             _mappingCS = ycs;
         }
@@ -69,7 +69,7 @@ namespace ChartCreator
         {
             if (colorsFLP.Controls.Count > 0)
             {
-                YarnColorSelector ycs = YCSList[YCSList.Count - 1];
+                YarnColorSelector ycs = (YarnColorSelector)colorsFLP.Controls[colorsFLP.Controls.Count - 1];
                 colorsFLP.Controls.Remove(ycs);
                 if(!Mapping)YCSList.Remove(ycs);
                 ycs.Dispose();

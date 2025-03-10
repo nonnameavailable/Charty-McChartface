@@ -276,7 +276,7 @@ namespace ChartCreator
                         double dG = IP.clamp(c.G / 255d + right[1] + errRow[i, 1], 0, 1);
                         double dB = IP.clamp(c.B / 255d + right[2] + errRow[i, 2], 0, 1);
                         Color curCol = Color.FromArgb((int)(dR * 255), (int)(dG * 255), (int)(dB * 255));
-                        int cci = closestYarnColorIndex(curCol, matchMode);
+                        int cci = closestYarnColorIndex(curCol, matchMode, currentColors);
                         r[i] = cci;
                         Color quCol = currentColors[cci];
 
@@ -331,22 +331,24 @@ namespace ChartCreator
                     int y = (int)((double)(j) / vCount * originalImage.Height);
                     Color mapColor = Map.GetPixel(x, y);
                     int closestMainColor = closestYarnColorIndex(mapColor, colorMatchCubic);
-					resultArr[j][i] = mappedArrList[closestMainColor][j][i] + countCumulationList[closestMainColor];
+					//resultArr[j][i] = mappedArrList[closestMainColor][j][i] + countCumulationList[closestMainColor];
+					r[i] = mappedArrList[closestMainColor][j][i] + countCumulationList[closestMainColor];
                 }
+				resultArr[j] = r;
             }
 			_mapChartArray = resultArr;
 		}
 
-		private int closestYarnColorIndex(Color tc, int matchMode)
+		private int closestYarnColorIndex(Color tc, int matchMode, List<Color> colorList = null)
         {
             switch(matchMode)
 			{
 				case colorMatchLinear:
-					return closestYarnColorIndexLinear(tc);
+					return closestYarnColorIndexLinear(tc, colorList);
 				case colorMatchCubic:
-					return closestYarnColorIndexCubic(tc);
+					return closestYarnColorIndexCubic(tc, colorList);
 				default:
-					return closestYarnColorIndexLab(tc);
+					return closestYarnColorIndexLab(tc, colorList);
 			}
         }
 

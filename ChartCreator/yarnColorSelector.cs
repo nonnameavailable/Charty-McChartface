@@ -16,7 +16,31 @@ namespace ChartCreator
         public Color Color { get => selectColorButton.BackColor; set => selectColorButton.BackColor = value; }
         public Color ReplacementColor { get => replacementColorButton.BackColor; set => replacementColorButton.BackColor = value; }
         public bool IsPainting { get => paintCB.Checked; set => paintCB.Checked = value; }
-        public List<Color> MappedColors { get; set; }
+        public List<YarnColorSelector> MappedYCSels { get; set; }
+        public List<Color> MappedColors {
+            get
+            {
+                List<Color> result = new List<Color>();
+                foreach(YarnColorSelector ycs in MappedYCSels)
+                {
+                    result.Add(ycs.Color);
+                }
+                return result;
+            }
+        }
+        public List<Color> MappedReplacementColors
+        {
+            get
+            {
+                List<Color> result = new List<Color>();
+                foreach (YarnColorSelector ycs in MappedYCSels)
+                {
+                    result.Add(ycs.ReplacementColor);
+                }
+                return result;
+            }
+        }
+        public List<Color> ReplacementColors { get; set; }
         public event EventHandler MapBtnClicked;
         public YarnColorSelector(Color c)
         {
@@ -25,7 +49,7 @@ namespace ChartCreator
             replacementColorButton.BackColor = c;
             yarnColorDialog.Color = c;
             paintCB.Click += PaintCB_Click;
-            MappedColors = new List<Color>();
+            MappedYCSels = new List<YarnColorSelector>();
             openMappedColorsBTN.Click += (sender, args) => MapBtnClicked?.Invoke(this, EventArgs.Empty);
         }
 
@@ -51,7 +75,7 @@ namespace ChartCreator
         {
             yarnColorDialog.ShowDialog();
             selectColorButton.BackColor = yarnColorDialog.Color;
-            replacementColorButton.BackColor = yarnColorDialog.Color;
+            //replacementColorButton.BackColor = yarnColorDialog.Color;
         }
 
         private void replacementColorButton_Click(object sender, EventArgs e)
